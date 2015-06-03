@@ -1,2 +1,2 @@
-*.db
+series.db
 __pycache__/*
