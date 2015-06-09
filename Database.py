@@ -34,6 +34,7 @@ class Database():
 
         proper = []
 
+        # Convert all string-list to db handable tuple
         for element in data:
             element[0] = str(element[0])
             element[1] = int(element[1])
