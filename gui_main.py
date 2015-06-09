@@ -61,7 +61,7 @@ class gui_main():
         complete_info = self.getSeriesInfo(many_series[0][1])
         compact_info = self.xml.getSeriesInfo(complete_info)
 
-        c = []
+        db_info = []
 
         for element in compact_info:
             a = []
@@ -70,9 +70,9 @@ class gui_main():
             for i in element:
                 a.append(i)
 
-            c.append(a)
+            db_info.append(a)
 
-        self.db.writeData(c)
+        self.db.writeData(db_info)
 
     def getSeriesInfo(self, id):
         return self.fetcher.getSeriesInfo(id)
