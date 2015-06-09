@@ -15,6 +15,7 @@ class gui_main():
         self.db = Database.Database()
 
         self.main_win = tkinter.Tk()
+        self.main_win.bind('q', self.closeApp)
 
         self.listbox = tkinter.Listbox(self.main_win, height = 5)
 
@@ -45,11 +46,18 @@ class gui_main():
 
         return selection
 
+    def closeApp(self, event):
+        self.db.closeDB()
+        self.main_win.destroy()
+
     def addSeries(self, event):
         name = self.addSeriesBox.get()
         info = self.fetcher.searchSeries(name)
         many_series = self.xml.searchSeries(info)
         # TODO: implement selection for multiple results
+        if len(many_series) > 1:
+            return
+
         complete_info = self.getSeriesInfo(many_series[0][1])
         compact_info = self.xml.getSeriesInfo(complete_info)
 
