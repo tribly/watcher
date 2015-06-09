@@ -11,7 +11,7 @@ class Database():
 
     def checkForDB(self):
         if not os.path.isfile('./series.db'):
-            self.createDB()
+            return self.createDB()
         else:
             return sqlite3.connect('series.db')
 
