@@ -2,11 +2,21 @@
 # encoding: utf-8
 
 import sqlite3
+import os.path
 
 class Database():
 
     def __init__(self):
-        self.connection = sqlite3.connect('series.db')
+        self.connection = self.checkForDB()
+
+    def checkForDB(self):
+        if not os.path.isfile('./series.db'):
+            self.createDB()
+        else:
+            return sqlite3.connect('series.db')
+
+    def closeDB(self):
+        self.connection.close()
 
     def getNext(self, id):
         cursor = self.connection.cursor()
@@ -35,3 +45,20 @@ class Database():
 
         cursor.executemany('INSERT INTO info VALUES(NULL, ?, ?, ?, ?, ?, 0)', proper)
         self.connection.commit()
+
+    def createDB(self):
+        connection = sqlite3.connect('series.db')
+        cursor = connection.cursor()
+
+        cursor.execute('''CREATE TABLE "info" (
+                          "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+                          "name" TEXT NOT NULL,
+                          "series_id" INTEGER NOT NULL,
+                          "season" INTEGER NOT NULL,
+                          "episode" INTEGER NOT NULL,
+                          "date" TEXT NOT NULL,
+                          "seen" INTEGER NOT NULL
+                          )''')
+
+        connection.commit()
+        return connection
