@@ -124,22 +124,34 @@ class StartPage(tk.Frame):
 
     def addSeries(self, event):
         name = self.addSeriesBox.get()
-        info = self.fetcher.searchSeries(name)
-        many_series = self.xml.searchSeries(info)
-        # TODO: implement selection for multiple results
-        if len(many_series) > 1:
-            print('multiple results, not implemented yet')
-            return
+        info = self.controller.fetcher.searchSeries(name)
+        self.search_dict = self.controller.xml.searchSeries(info)
 
-        complete_info = self.getSeriesInfo(many_series[0][1])
-        compact_info = self.xml.getSeriesInfo(complete_info)
+        if len(self.search_dict) > 1:
+            names = []
+            for k in self.search_dict:
+                names.append(k)
+
+            self.controller.fillSearchList(names)
+        else:
+            for k in self.search_dict.keys():
+                self.addSeries2(k)
+
+    def addSeries2(self, name):
+        selected_series_id = self.search_dict[name]
+
+        # html
+        complete_info = self.getSeriesInfo(selected_series_id)
+        # xml
+        compact_info = self.controller.xml.getSeriesInfo(complete_info)
 
         db_info = []
 
         for element in compact_info:
             a = []
-            a.append(many_series[0][0])
-            a.append(many_series[0][1])
+            a.append(name)
+            a.append(selected_series_id)
+
             for i in element:
                 a.append(i)
 
