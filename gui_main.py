@@ -9,34 +9,76 @@ import Database
 
 class Watcher(tk.Tk):
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
         self.fetcher = SeriesInfo.SeriesInfo()
         self.xml = XMLParser.XMLParser()
         self.db = Database.Database()
 
-        self.main_win = tk.Tk()
-        self.main_win.bind('q', self.closeApp)
+        self.container = tk.Frame(self)
+        self.container.pack(side = "top", fill="both", expand=True)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
-        self.listbox = tk.Listbox(self.main_win, height = 5)
+        self.bind('<Control-q>', self.closeApp)
+
+        self.frames = {}
+
+        for F in (StartPage, SearchPage):
+            frame = F(self.container, self)
+            self.frames[F] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        self.show_frame(StartPage)
+
+    def fillSearchList(self, array):
+        self.frames[SearchPage].fillListbox(array)
+        self.frames[SearchPage].tkraise()
+
+    def getSelectionSearch(self, event):
+        entry = self.frames[SearchPage].listbox.curselection()
+        selection = self.frames[SearchPage].listbox.get(entry)
+
+        self.frames[StartPage].addSeries2(selection)
+
+        self.show_frame(StartPage)
+
+    def show_frame(self, c):
+        frame = self.frames[c]
+        frame.tkraise()
+
+    def closeApp(self, event):
+        self.db.closeDB()
+        self.destroy()
+
+
+class StartPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+
+        self.controller = controller
+
+        self.listbox = tk.Listbox(self, height = 5)
         self.listbox.bind('<Return>', self.getSelection)
 
-        self.addSeriesBox = tk.Entry(self.main_win)
+        self.addSeriesBox = tk.Entry(self)
         self.addSeriesBox.bind('<Return>', self.addSeries)
 
         self.fillNextList()
-        self.addSeriesBox.grid(row = 0, column = 0)
-        self.listbox.grid(row = 1, column = 0)
 
-        self.main_win.mainloop()
+        self.addSeriesBox.grid()
+        self.listbox.grid()
+
+        self.search_dict = {}
 
     def fillNextList(self):
         self.listbox.delete(0, tk.END)
-        series_ids = self.db.getUniqueIDs()
+        series_ids = self.controller.db.getUniqueIDs()
 
         series_next = []
 
         for id in series_ids:
-            series_next.append(self.db.getNext(id[0]))
+            series_next.append(self.controller.db.getNext(id[0]))
 
         pretty_info = self.compactInfo(series_next)
 
@@ -80,10 +122,6 @@ class Watcher(tk.Tk):
 
         return selection
 
-    def closeApp(self, event):
-        self.db.closeDB()
-        self.main_win.destroy()
-
     def addSeries(self, event):
         name = self.addSeriesBox.get()
         info = self.fetcher.searchSeries(name)
@@ -107,11 +145,30 @@ class Watcher(tk.Tk):
 
             db_info.append(a)
 
-        self.db.writeData(db_info)
+        self.controller.db.writeData(db_info)
         self.fillNextList()
 
     def getSeriesInfo(self, id):
-        return self.fetcher.getSeriesInfo(id)
+        return self.controller.fetcher.getSeriesInfo(id)
+
+
+class SearchPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+
+        self.listbox = tk.Listbox(self)
+        self.listbox.bind('<Return>', controller.getSelectionSearch)
+        self.listbox.grid()
+
+    def fillListbox(self, array):
+        for name in array:
+            self.listbox.insert(tk.END, name)
+
+    def getSelection(self):
+        entry = self.listbox.curselection()
+        selection = self.listbox.get(entry[0])
+
+        return selection
 
 
 if __name__ == "__main__":
