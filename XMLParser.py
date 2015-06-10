@@ -39,19 +39,18 @@ class XMLParser():
 
         series = root.findall('Series')
 
-        series_array = []
+        series_dict = {}
 
         if len(series)  == 1:
-            series_info = []
-            series_info.append(series[0].find('SeriesName').text)
-            series_info.append(series[0].find('id').text)
+            name = series[0].find('SeriesName').text
+            id = series[0].find('id').text
+
+            series_dict[name] = id
 
         for child in series:
-            series_info = []
-            series_info.append(child.find('SeriesName').text)
-            series_info.append(child.find('id').text)
+            name = child.find('SeriesName').text
+            id = child.find('id').text
+            series_dict[name] = id
 
-            series_array.append(series_info)
-
-        return series_array
+        return series_dict
 
