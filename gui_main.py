@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import tkinter
+import tkinter as tk
 import SeriesItem
 import SeriesInfo
 import XMLParser
@@ -14,13 +14,13 @@ class gui_main():
         self.xml = XMLParser.XMLParser()
         self.db = Database.Database()
 
-        self.main_win = tkinter.Tk()
+        self.main_win = tk.Tk()
         self.main_win.bind('q', self.closeApp)
 
-        self.listbox = tkinter.Listbox(self.main_win, height = 5)
+        self.listbox = tk.Listbox(self.main_win, height = 5)
         self.listbox.bind('<Return>', self.getSelection)
 
-        self.addSeriesBox = tkinter.Entry(self.main_win)
+        self.addSeriesBox = tk.Entry(self.main_win)
         self.addSeriesBox.bind('<Return>', self.addSeries)
 
         self.fillNextList()
@@ -40,7 +40,7 @@ class gui_main():
         pretty_info = self.compactInfo(series_next)
 
         for series in pretty_info:
-            self.listbox.insert(tkinter.END, series)
+            self.listbox.insert(tk.END, series)
 
     def compactInfo(self, data):
         total_info = []
