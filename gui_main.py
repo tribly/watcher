@@ -7,7 +7,7 @@ import SeriesInfo
 import XMLParser
 import Database
 
-class gui_main():
+class Watcher(tk.Tk):
 
     def __init__(self):
         self.fetcher = SeriesInfo.SeriesInfo()
@@ -115,4 +115,5 @@ class gui_main():
 
 
 if __name__ == "__main__":
-    gui_main()
+    app = Watcher()
+    app.mainloop()
