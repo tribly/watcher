@@ -21,24 +21,56 @@ class gui_main():
 
         self.addSeriesBox = tkinter.Entry(self.main_win)
         self.addSeriesBox.bind('<Return>', self.addSeries)
+
+        self.fillNextList()
         self.addSeriesBox.grid(row = 0, column = 0)
-
-        #################
-        item_list = []
-
-        names = ["game of thrones", "person of interest",
-                 "orphan black", "family guy", "american dad"]
-
-        for i in range(5):
-            item_list.append(SeriesItem.SeriesItem(names[i], i+1, i+2))
-
-        for i in item_list:
-            self.listbox.insert(tkinter.END, i.getInfo())
-        ###################
-        self.listbox.bind('<Return>', self.getSelection)
-        self.listbox.grid()
+        self.listbox.grid(row = 1, column = 0)
 
         self.main_win.mainloop()
+
+    def fillNextList(self):
+        series_ids = self.db.getUniqueIDs()
+
+        series_next = []
+
+        for id in series_ids:
+            series_next.append(self.db.getNext(id[0]))
+
+        pretty_info = self.compactInfo(series_next)
+
+        for series in pretty_info:
+            self.listbox.insert(tkinter.END, series)
+
+    def compactInfo(self, data):
+        total_info = []
+
+        for series in data:
+            to_short = []
+            to_short.append(series[0])
+            to_short.append(series[2])
+            to_short.append(series[3])
+
+            info_string = self.concInfo(to_short)
+            total_info.append(info_string)
+
+        return total_info
+
+    def concInfo(self, data):
+        info_string = ""
+
+        if data[1] < 10:
+            data[1] = "0" + str(data[1])
+        else:
+            data[1] = str(data[1])
+
+        if data[2] < 10:
+            data[2] = "0" + str(data[2])
+        else:
+            data[2] = str(data[2])
+
+        info_string += data[0] + ' - s' + data[1] + 'e' + data[2]
+
+        return info_string
 
     def getSelection(self, event):
         entry = self.listbox.curselection()

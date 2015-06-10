@@ -21,13 +21,22 @@ class Database():
     def getNext(self, id):
         cursor = self.connection.cursor()
 
-        cursor.execute("SELECT name, season, episode\
-                        FROM info\
-                        WHERE seen = 0")
+        id = (id,)
 
-        # TODO: fetch proper one
-        data = cursor.fetchone()
-        return data
+        cursor.execute('''SELECT name, series_id, season, episode
+                        FROM info
+                        WHERE seen = 0
+                        AND series_ID = ?
+                        ORDER BY date asc, episode asc''', id)
+
+        return cursor.fetchone()
+
+    def getUniqueIDs(self):
+        cursor = self.connection.cursor()
+
+        cursor.execute('SELECT DISTINCT series_ID FROM info')
+
+        return cursor.fetchall()
 
     def writeData(self, data):
         cursor = self.connection.cursor()
