@@ -30,6 +30,7 @@ class gui_main():
         self.main_win.mainloop()
 
     def fillNextList(self):
+        self.listbox.delete(0, tk.END)
         series_ids = self.db.getUniqueIDs()
 
         series_next = []
@@ -107,6 +108,7 @@ class gui_main():
             db_info.append(a)
 
         self.db.writeData(db_info)
+        self.fillNextList()
 
     def getSeriesInfo(self, id):
         return self.fetcher.getSeriesInfo(id)
