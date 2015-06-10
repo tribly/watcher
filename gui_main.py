@@ -18,6 +18,7 @@ class gui_main():
         self.main_win.bind('q', self.closeApp)
 
         self.listbox = tkinter.Listbox(self.main_win, height = 5)
+        self.listbox.bind('<Return>', self.getSelection)
 
         self.addSeriesBox = tkinter.Entry(self.main_win)
         self.addSeriesBox.bind('<Return>', self.addSeries)
@@ -88,6 +89,7 @@ class gui_main():
         many_series = self.xml.searchSeries(info)
         # TODO: implement selection for multiple results
         if len(many_series) > 1:
+            print('multiple results, not implemented yet')
             return
 
         complete_info = self.getSeriesInfo(many_series[0][1])
