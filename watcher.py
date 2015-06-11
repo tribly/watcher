@@ -24,6 +24,9 @@ class Watcher(tk.Tk):
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
 
+        self.status_bar = ttk.Label(self)
+        self.status_bar.pack(sticky = "se")
+
         self.bind('<Control-q>', self.closeApp)
 
         self.frames = {}
@@ -35,9 +38,13 @@ class Watcher(tk.Tk):
 
         self.show_frame(StartPage)
 
-    def updateStatus(self, widget, text):
-        widget.config(text=text)
-        widget.update_idletasks()
+    def updateStatus(self, text):
+        self.status_bar.config(text=text)
+        self.status_bar.update_idletasks()
+
+    def clearStatus(self):
+        self.status_bar.config(text='')
+        self.status_bar.update_idletasks()
 
     def fillSearchList(self, array):
         self.frames[SearchPage].fillListbox(array)
@@ -126,13 +133,10 @@ class StartPage(tk.Frame):
         self.addSeriesBox.insert(tk.END, "Add series...")
         self.addSeriesBox.bind('<Return>', self.addSeries)
 
-        self.status_bar = ttk.Label(self)
-
         self.fillNextList()
 
         self.addSeriesBox.grid(pady = "5")
         self.listbox.grid()
-        self.status_bar.grid()
         self.listbox.focus_set()
 
         self.search_dict = {}
@@ -191,12 +195,12 @@ class StartPage(tk.Frame):
     def addSeries(self, event):
         name = self.addSeriesBox.get()
 
-        self.controller.updateStatus(self.status_bar, 'searching...')
+        self.controller.updateStatus('searching...')
 
         info = self.controller.fetcher.searchSeries(name)
         self.search_dict = self.controller.xml.searchSeries(info)
 
-        self.controller.updateStatus(self.status_bar, '')
+        self.controller.clearStatus()
 
         if len(self.search_dict) > 1:
             names = []
@@ -206,9 +210,9 @@ class StartPage(tk.Frame):
             self.controller.fillSearchList(names)
         else:
             for k in self.search_dict.keys():
-                self.controller.updateStatus(self.status_bar, 'fetching info for: ' + k)
+                self.controller.updateStatus('fetching info for: ' + k)
                 self.addSeries2(k)
-                self.controller.updateStatus(self.status_bar, 'added: ' + k)
+                self.controller.updateStatus('added: ' + k)
 
     def addSeries2(self, name):
         selected_series_id = self.search_dict[name]
@@ -244,10 +248,7 @@ class SearchPage(tk.Frame):
         self.listbox = tk.Listbox(self)
         self.listbox.bind('<Return>', controller.getSelectionSearch)
 
-        self.status_bar = tk.Label(self)
-
         self.listbox.grid()
-        self.status_bar.grid()
 
     def fillListbox(self, array):
         for name in array:
@@ -263,11 +264,7 @@ class WatchPage(tk.Frame):
         self.listbox.insert(tk.END, 'only next')
         self.listbox.bind('<Return>', controller.getSelectionWatch)
 
-        self.status_bar = tk.Label(self)
-
         self.listbox.grid()
-        self.status_bar.grid()
-
 
 if __name__ == "__main__":
     app = Watcher()
