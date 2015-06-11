@@ -6,6 +6,7 @@ import SeriesItem
 import SeriesInfo
 import XMLParser
 import Database
+import webbrowser
 
 class Watcher(tk.Tk):
 
@@ -14,6 +15,8 @@ class Watcher(tk.Tk):
         self.fetcher = SeriesInfo.SeriesInfo()
         self.xml = XMLParser.XMLParser()
         self.db = Database.Database()
+
+        self.start_page_selection = ""
 
         self.container = tk.Frame(self)
         self.container.pack(side = "top", fill="both", expand=True)
@@ -24,7 +27,7 @@ class Watcher(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, SearchPage):
+        for F in (StartPage, SearchPage, WatchPage):
             frame = F(self.container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -33,7 +36,7 @@ class Watcher(tk.Tk):
 
     def fillSearchList(self, array):
         self.frames[SearchPage].fillListbox(array)
-        self.frames[SearchPage].tkraise()
+        self.show_frame(SearchPage)
 
     def getSelectionSearch(self, event):
         entry = self.frames[SearchPage].listbox.curselection()
@@ -43,9 +46,62 @@ class Watcher(tk.Tk):
 
         self.show_frame(StartPage)
 
+    def getSelectionWatch(self, event):
+        entry = self.frames[WatchPage].listbox.curselection()
+        selection = self.frames[WatchPage].listbox.get(entry)
+
+        if selection == 'kat':
+            self.prepareKATLink(self.start_page_selection)
+        elif selection == 'watchseries':
+            self.prepareWSLink(self.start_page_selection)
+        elif selection == 'next':
+            # TODO: implement just next
+            pass
+
+        self.show_frame(StartPage)
+
+    def prepareWSLink(self, info):
+        info = info.replace(' - ', ' ')
+        info = info.replace(' ', '_')
+        info = info.replace('!', '')
+        info_tmp = info[:-6]
+
+        season = int(info[-5:-3])
+        episode = int(info[-2:])
+
+        info_tmp = info_tmp + 's' + str(season)
+        info_tmp = info_tmp + '_e' + str(episode)
+
+        url_prefix = 'http://watchseries.lt/episode/'
+        url_suffix = '.html'
+
+        url = url_prefix + info_tmp + url_suffix
+
+        webbrowser.open(url)
+
+    def prepareKATLink(self, info):
+        info = info.replace(' - ', ' ')
+        info = info.replace(' ', '%20')
+
+        url_prefix = 'https://kat.cr/usearch/'
+        url_suffix = '/?field=size&sorder=desc'
+
+        url = url_prefix + info + url_suffix
+
+        webbrowser.open(url)
+
+    def getSelectionStart(self, event):
+        entry = self.frames[StartPage].listbox.curselection()
+        selection = self.frames[StartPage].listbox.get(entry)
+
+        self.start_page_selection = selection
+
+        self.show_frame(WatchPage)
+
     def show_frame(self, c):
         frame = self.frames[c]
         frame.tkraise()
+        frame.listbox.focus_set()
 
     def closeApp(self, event):
         self.db.closeDB()
@@ -59,15 +115,17 @@ class StartPage(tk.Frame):
         self.controller = controller
 
         self.listbox = tk.Listbox(self, height = 5)
-        self.listbox.bind('<Return>', self.getSelection)
+        self.listbox.bind('<Return>', self.controller.getSelectionStart)
 
         self.addSeriesBox = tk.Entry(self)
+        self.addSeriesBox.insert(tk.END, "Add series...")
         self.addSeriesBox.bind('<Return>', self.addSeries)
 
         self.fillNextList()
 
         self.addSeriesBox.grid()
         self.listbox.grid()
+        self.listbox.focus_set()
 
         self.search_dict = {}
 
@@ -118,7 +176,7 @@ class StartPage(tk.Frame):
 
     def getSelection(self, event):
         entry = self.listbox.curselection()
-        selection = self.listbox.get(entry[0])
+        selection = self.listbox.get(entry)
 
         return selection
 
@@ -176,11 +234,16 @@ class SearchPage(tk.Frame):
         for name in array:
             self.listbox.insert(tk.END, name)
 
-    def getSelection(self):
-        entry = self.listbox.curselection()
-        selection = self.listbox.get(entry[0])
+class WatchPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
 
-        return selection
+        self.listbox = tk.Listbox(self)
+        self.listbox.insert(tk.END, 'kat')
+        self.listbox.insert(tk.END, 'watchseries')
+        self.listbox.insert(tk.END, 'only next')
+        self.listbox.bind('<Return>', controller.getSelectionWatch)
+        self.listbox.grid()
 
 
 if __name__ == "__main__":
