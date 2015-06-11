@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 import tkinter as tk
+import tkinter.ttk as ttk
 import SeriesItem
 import SeriesInfo
 import XMLParser
@@ -18,7 +19,7 @@ class Watcher(tk.Tk):
 
         self.start_page_selection = ""
 
-        self.container = tk.Frame(self)
+        self.container = ttk.Frame(self, padding = "5 5 5 5")
         self.container.pack(side = "top", fill="both", expand=True)
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
@@ -118,18 +119,18 @@ class StartPage(tk.Frame):
 
         self.controller = controller
 
-        self.listbox = tk.Listbox(self, height = 5)
+        self.listbox = tk.Listbox(self, height = 10)
         self.listbox.bind('<Return>', self.controller.getSelectionStart)
 
-        self.addSeriesBox = tk.Entry(self)
+        self.addSeriesBox = ttk.Entry(self)
         self.addSeriesBox.insert(tk.END, "Add series...")
         self.addSeriesBox.bind('<Return>', self.addSeries)
 
-        self.status_bar = tk.Label(self)
+        self.status_bar = ttk.Label(self)
 
         self.fillNextList()
 
-        self.addSeriesBox.grid()
+        self.addSeriesBox.grid(pady = "5")
         self.listbox.grid()
         self.status_bar.grid()
         self.listbox.focus_set()
