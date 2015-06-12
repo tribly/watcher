@@ -265,11 +265,9 @@ class SearchPage(tk.Frame):
         self.listbox.grid()
 
     def setTakeFocus(self):
-        print('searchpage setting')
         self.listbox.config(takefocus=True)
 
     def unsetTakeFocus(self):
-        print('searchpage unsetting')
         self.listbox.config(takefocus=False)
 
     def fillListbox(self, array):
@@ -289,11 +287,9 @@ class WatchPage(tk.Frame):
         self.listbox.grid()
 
     def setTakeFocus(self):
-        print('watchpage setting')
         self.listbox.config(takefocus=True)
 
     def unsetTakeFocus(self):
-        print('watchpage unsetting')
         self.listbox.config(takefocus=False)
 
 if __name__ == "__main__":
