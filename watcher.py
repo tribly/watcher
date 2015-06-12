@@ -254,6 +254,7 @@ class StartPage(ttk.Frame):
     def setTakeFocus(self):
         self.addSeriesBox.config(takefocus=True)
         self.listbox.config(takefocus=True)
+        self.listbox.focus_set()
 
     def unsetTakeFocus(self):
         self.listbox.config(takefocus=False)
@@ -272,6 +273,7 @@ class SearchPage(tk.Frame):
 
     def setTakeFocus(self):
         self.listbox.config(takefocus=True)
+        self.listbox.focus_set()
 
     def unsetTakeFocus(self):
         self.listbox.config(takefocus=False)
@@ -294,6 +296,7 @@ class WatchPage(tk.Frame):
 
     def setTakeFocus(self):
         self.listbox.config(takefocus=True)
+        self.listbox.focus_set()
 
     def unsetTakeFocus(self):
         self.listbox.config(takefocus=False)
