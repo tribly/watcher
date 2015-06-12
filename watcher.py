@@ -114,6 +114,7 @@ class Watcher(tk.Tk):
 
         self.start_page_selection = selection
 
+        self.frames[WatchPage].setLabel(self.start_page_selection)
         self.showFrame(WatchPage)
 
     def showFrame(self, to_show):
@@ -289,6 +290,8 @@ class WatchPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
+        self.label = ttk.Label(self, takefocus=False)
+
         self.listbox = tk.Listbox(self, takefocus=False)
         self.listbox.insert(tk.END, 'kat')
         self.listbox.insert(tk.END, 'watchseries')
@@ -296,7 +299,11 @@ class WatchPage(tk.Frame):
         self.listbox.bind('<Return>', controller.getSelectionWatch)
         self.listbox.bind('<Double-Button-1>', controller.getSelectionWatch)
 
+        self.label.grid(pady = "10")
         self.listbox.grid()
+
+    def setLabel(self, text):
+        self.label.config(text = text)
 
     def setTakeFocus(self):
         self.listbox.config(takefocus=True)
