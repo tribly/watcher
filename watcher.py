@@ -36,7 +36,7 @@ class Watcher(tk.Tk):
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame(StartPage)
+        self.showFrame(StartPage)
 
     def updateStatus(self, text):
         self.status_bar.config(text=text)
@@ -48,7 +48,7 @@ class Watcher(tk.Tk):
 
     def fillSearchList(self, array):
         self.frames[SearchPage].fillListbox(array)
-        self.show_frame(SearchPage)
+        self.showFrame(SearchPage)
 
     def getSelectionSearch(self, event):
         entry = self.frames[SearchPage].listbox.curselection()
@@ -56,7 +56,7 @@ class Watcher(tk.Tk):
 
         self.frames[StartPage].addSeries2(selection)
 
-        self.show_frame(StartPage)
+        self.showFrame(StartPage)
 
     def getSelectionWatch(self, event):
         entry = self.frames[WatchPage].listbox.curselection()
@@ -70,7 +70,7 @@ class Watcher(tk.Tk):
             # TODO: implement just next
             pass
 
-        self.show_frame(StartPage)
+        self.showFrame(StartPage)
 
     def prepareWSLink(self, info):
         info = info.replace(' - ', ' ')
@@ -108,15 +108,15 @@ class Watcher(tk.Tk):
 
         self.start_page_selection = selection
 
-        self.show_frame(WatchPage)
+        self.showFrame(WatchPage)
 
-    def show_frame(self, c):
-        frame = self.frames[c]
+    def showFrame(self, to_show):
+        frame = self.frames[to_show]
         frame.tkraise()
         frame.setTakeFocus()
 
         for f in self.frames:
-            if f == c:
+            if f == to_show:
                 continue
             self.frames[f].unsetTakeFocus()
 
