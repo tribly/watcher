@@ -25,7 +25,7 @@ class Watcher(tk.Tk):
         self.container.grid_columnconfigure(0, weight=1)
 
         self.status_bar = ttk.Label(self)
-        self.status_bar.pack(sticky = "se")
+        self.status_bar.pack()
 
         self.bind('<Control-q>', self.closeApp)
 
@@ -113,14 +113,19 @@ class Watcher(tk.Tk):
     def show_frame(self, c):
         frame = self.frames[c]
         frame.tkraise()
-        frame.listbox.focus_set()
+        frame.setTakeFocus()
+
+        for f in self.frames:
+            if f == c:
+                continue
+            self.frames[f].unsetTakeFocus()
 
     def closeApp(self, event):
         self.db.closeDB()
         self.destroy()
 
 
-class StartPage(tk.Frame):
+class StartPage(ttk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
@@ -240,15 +245,32 @@ class StartPage(tk.Frame):
     def getSeriesInfo(self, id):
         return self.controller.fetcher.getSeriesInfo(id)
 
+    def setTakeFocus(self):
+        self.addSeriesBox.config(takefocus=True)
+        self.listbox.config(takefocus=True)
+
+    def unsetTakeFocus(self):
+        self.listbox.config(takefocus=False)
+        self.addSeriesBox.config(takefocus=False)
+
 
 class SearchPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.config(takefocus=False)
 
-        self.listbox = tk.Listbox(self)
+        self.listbox = tk.Listbox(self, takefocus=False)
         self.listbox.bind('<Return>', controller.getSelectionSearch)
 
         self.listbox.grid()
+
+    def setTakeFocus(self):
+        print('searchpage setting')
+        self.listbox.config(takefocus=True)
+
+    def unsetTakeFocus(self):
+        print('searchpage unsetting')
+        self.listbox.config(takefocus=False)
 
     def fillListbox(self, array):
         for name in array:
@@ -258,13 +280,21 @@ class WatchPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        self.listbox = tk.Listbox(self)
+        self.listbox = tk.Listbox(self, takefocus=False)
         self.listbox.insert(tk.END, 'kat')
         self.listbox.insert(tk.END, 'watchseries')
         self.listbox.insert(tk.END, 'only next')
         self.listbox.bind('<Return>', controller.getSelectionWatch)
 
         self.listbox.grid()
+
+    def setTakeFocus(self):
+        print('watchpage setting')
+        self.listbox.config(takefocus=True)
+
+    def unsetTakeFocus(self):
+        print('watchpage unsetting')
+        self.listbox.config(takefocus=False)
 
 if __name__ == "__main__":
     app = Watcher()
