@@ -139,10 +139,12 @@ class StartPage(ttk.Frame):
 
         self.listbox = tk.Listbox(self, height = 10)
         self.listbox.bind('<Return>', self.controller.getSelectionStart)
+        self.listbox.bind('<Double-Button-1>', self.controller.getSelectionStart)
 
         self.addSeriesBox = ttk.Entry(self)
         self.addSeriesBox.insert(tk.END, "Add series...")
         self.addSeriesBox.bind('<Return>', self.addSeries)
+        self.addSeriesBox.bind('<Double-Button-1>', self.addSeries)
 
         self.fillNextList()
 
@@ -268,6 +270,7 @@ class SearchPage(tk.Frame):
 
         self.listbox = tk.Listbox(self, takefocus=False)
         self.listbox.bind('<Return>', controller.getSelectionSearch)
+        self.listbox.bind('<Double-Button-1>', controller.getSelectionSearch)
 
         self.listbox.grid()
 
@@ -291,6 +294,7 @@ class WatchPage(tk.Frame):
         self.listbox.insert(tk.END, 'watchseries')
         self.listbox.insert(tk.END, 'only next')
         self.listbox.bind('<Return>', controller.getSelectionWatch)
+        self.listbox.bind('<Double-Button-1>', controller.getSelectionWatch)
 
         self.listbox.grid()
 
