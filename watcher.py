@@ -146,7 +146,7 @@ class StartPage(ttk.Frame):
 
         self.fillNextList()
 
-        self.addSeriesBox.grid(pady = "5")
+        self.addSeriesBox.grid(pady = "10")
         self.listbox.grid()
         self.listbox.focus_set()
 
