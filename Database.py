@@ -20,10 +20,20 @@ class Database():
 
     def getNext(self, id):
         cursor = self.connection.cursor()
-
         id = (id,)
 
         cursor.execute('''SELECT name, series_id, season, episode
+                        FROM info
+                        WHERE seen = 0
+                        AND series_ID = ?
+                        ORDER BY date asc, episode asc''', id)
+
+        return cursor.fetchone()
+
+    def getNextID(self, id):
+        cursor = self.connection.cursor()
+
+        cursor.execute('''SELECT id
                         FROM info
                         WHERE seen = 0
                         AND series_ID = ?
@@ -54,6 +64,34 @@ class Database():
             proper.append(tuple(element))
 
         cursor.executemany('INSERT INTO info VALUES(NULL, ?, ?, ?, ?, ?, 0)', proper)
+        self.connection.commit()
+
+    def extractName(self, data):
+        pos = data.find('-')
+
+        return data[:pos - 1]
+
+    def getIdFromName(self, name):
+        cursor = self.connection.cursor()
+        name = (name,)
+
+        cursor.execute('''SELECT series_id
+                          FROM info
+                          WHERE name = ?''', name)
+
+        series_id = cursor.fetchone()
+        return series_id
+
+    def setWatched(self, name):
+        cursor = self.connection.cursor()
+        name = self.extractName(name)
+        id = self.getIdFromName(name)
+
+        next_ = self.getNextID(id)
+
+        cursor.execute('''UPDATE info
+                          SET seen = 1
+                          WHERE id = ?''', next_)
         self.connection.commit()
 
     def createDB(self):

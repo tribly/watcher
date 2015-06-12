@@ -66,11 +66,17 @@ class Watcher(tk.Tk):
             self.prepareKATLink(self.start_page_selection)
         elif selection == 'watchseries':
             self.prepareWSLink(self.start_page_selection)
-        elif selection == 'next':
-            # TODO: implement just next
+        elif selection == 'only next':
+            # TODO: placeholder
             pass
 
+        self.setWatched(self.start_page_selection)
+        self.frames[StartPage].fillNextList()
+
         self.showFrame(StartPage)
+
+    def setWatched(self, name):
+        self.db.setWatched(name)
 
     def prepareWSLink(self, info):
         info = info.replace(' - ', ' ')
