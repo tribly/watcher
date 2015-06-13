@@ -31,12 +31,12 @@ class Watcher(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, SearchPage, WatchPage):
+        for F in (StartPage, SearchPage, WatchPage, MarkPage):
             frame = F(self.container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.showFrame(StartPage)
+        self.showFrame(MarkPage)
 
     def updateStatus(self, text):
         self.status_bar.config(text=text)
@@ -68,6 +68,8 @@ class Watcher(tk.Tk):
             self.prepareWSLink(self.start_page_selection)
         elif selection == 'only next':
             # TODO: placeholder
+            pass
+        elif selection == 'mark list':
             pass
 
         self.setWatched(self.start_page_selection)
@@ -296,6 +298,7 @@ class WatchPage(tk.Frame):
         self.listbox.insert(tk.END, 'kat')
         self.listbox.insert(tk.END, 'watchseries')
         self.listbox.insert(tk.END, 'only next')
+        self.listbox.insert(tk.END, 'mark list')
         self.listbox.bind('<Return>', controller.getSelectionWatch)
         self.listbox.bind('<Double-Button-1>', controller.getSelectionWatch)
 
@@ -311,6 +314,74 @@ class WatchPage(tk.Frame):
 
     def unsetTakeFocus(self):
         self.listbox.config(takefocus=False)
+
+class MarkPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+
+        # TODO move to Watcher
+        self.controller = controller
+
+        self.var_list = []
+
+        #self.var_list.append(tk.IntVar())
+        #self.var_list.append(tk.IntVar())
+
+        self.label = ttk.Label(self, takefocus=False)
+        self.button = ttk.Button(self, takefocus=False, command = self.actio)
+
+        ####
+        self.label.config(text = 'hihohahihohahihoha')
+        self.button.config(text = 'lala')
+        ###
+        #self.cb = ttk.Checkbutton(self)
+        #self.cb.config(text = 'testbutton', variable = self.var_list[0])
+        #self.cb2 = ttk.Checkbutton(self)
+        #self.cb2.config(text = 'testbutton', variable = self.var_list[1])
+
+        self.label.grid(pady = "10", padx = 10, row = 0, column = 0, sticky = "w")
+        self.button.grid(row = 0, column = 1, sticky = "w")
+        #self.cb.grid(row = 2, column = 0, sticky = "w")
+        #self.cb2.grid(row = 3, column = 0, padx = (35,0), sticky = "w")
+
+    def populateMenu(self):
+        row = 1
+        season_count = 1
+        episode_count = 1
+        for season in self.var_list:
+            for episode in season:
+                cb = ttk.Checkbutton(self, variable = episode, text = episode_count)
+                cb.grid(row = row, column = 0)
+                episode_count += 1
+                row += 1
+            break
+            episode_count = 0
+            season_count += 1
+
+    def fillVarList(self, data):
+        for season in data.keys():
+            self.var_list.append([])
+            for n in range(data[season]):
+                self.var_list[season - 1].append(tk.IntVar())
+
+
+    # TODO: refactor
+    def actio(self):
+        data = self.controller.db.getSeasonEpisodeData('Family Guy -')
+        self.fillVarList(data)
+        self.populateMenu()
+
+    def setLabel(self, text):
+        self.label.config(text = text)
+
+    def setTakeFocus(self):
+        pass
+        #self.listbox.config(takefocus=True)
+        #self.listbox.focus_set()
+
+    def unsetTakeFocus(self):
+        pass
+        #self.listbox.config(takefocus=False)
 
 if __name__ == "__main__":
     app = Watcher()

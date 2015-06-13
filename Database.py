@@ -94,6 +94,32 @@ class Database():
                           WHERE id = ?''', next_)
         self.connection.commit()
 
+    def getSeasonEpisodeData(self, name):
+        cursor = self.connection.cursor()
+        name = self.extractName(name)
+        id = self.getIdFromName(name)
+
+        cursor.execute('''SELECT season
+                          FROM info
+                          WHERE series_id = ?
+                          ORDER BY season DESC''', id)
+
+        nr_seasons = cursor.fetchone()[0]
+        data = {}
+
+        for season in range(1, nr_seasons + 1):
+            season_ = (id[0], season)
+            cursor.execute('''SELECT episode
+                              FROM info
+                              WHERE series_id = ?
+                              AND season = ?
+                              ORDER BY episode DESC''', season_)
+
+            nr_episodes = cursor.fetchone()[0]
+            data[season] = nr_episodes
+
+        return data
+
     def createDB(self):
         connection = sqlite3.connect('series.db')
         cursor = connection.cursor()
