@@ -373,37 +373,48 @@ class MarkPage(tk.Frame):
 
         self.controller.showFrame(StartPage)
 
+    def clearBoxes(self):
+        self.var_list = []
+        self.textbox.config(state = tk.NORMAL)
+        self.textbox.delete("1.0", tk.END)
+        self.textbox.config(state = tk.DISABLED)
+
     def startSelection(self):
+        self.clearBoxes()
         name = self.label["text"]
         data = self.controller.db.getSeasonEpisodeData(name)
-        print(data)
         self.fillVarList(data)
         self.textbox.config(state = tk.NORMAL)
         self.populateMenu()
         self.textbox.config(state = tk.DISABLED)
 
     def populateMenu(self):
-        row = 1
         season_count = 1
         episode_count = 1
+
         for season in self.var_list:
             self.textbox.insert(tk.END, "Season " + str(season_count))
             for episode in season:
                 cb = ttk.Checkbutton(self, variable = episode, text = "Episode " + str(episode_count))
+                if episode == 1:
+                    cb.config(state = tk.ACTIVE)
                 self.textbox.insert(tk.END, "\n")
                 self.textbox.window_create(tk.END, window = cb)
                 episode_count += 1
-                row += 1
 
             self.textbox.insert(tk.END, "\n\n")
             episode_count = 1
             season_count += 1
 
     def fillVarList(self, data):
-        for season in data.keys():
+        season_index = 0
+        for season in data:
             self.var_list.append([])
-            for n in range(data[season]):
-                self.var_list[season - 1].append(tk.IntVar())
+            for episode in season:
+                val = tk.IntVar()
+                val.set(episode)
+                self.var_list[season_index].append(val)
+            season_index += 1
 
     # TODO: refactor
     def actio(self):

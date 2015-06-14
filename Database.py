@@ -127,18 +127,21 @@ class Database():
                           ORDER BY season DESC''', id)
 
         nr_seasons = cursor.fetchone()[0]
-        data = {}
+        data = []
 
-        for season in range(1, nr_seasons + 1):
-            season_ = (id[0], season)
-            cursor.execute('''SELECT episode
+        for season in range(nr_seasons):
+            data.append([])
+            season_ = (id[0], season + 1)
+            cursor.execute('''SELECT seen
                               FROM info
                               WHERE series_id = ?
                               AND season = ?
-                              ORDER BY episode DESC''', season_)
+                              ORDER BY episode ASC''', season_)
 
-            nr_episodes = cursor.fetchone()[0]
-            data[season] = nr_episodes
+            nr_episodes = cursor.fetchall()
+
+            for e in nr_episodes:
+                data[season].append(e[0])
 
         return data
 
