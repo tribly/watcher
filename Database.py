@@ -69,7 +69,29 @@ class Database():
     def extractName(self, data):
         pos = data.find('-')
 
+        if pos == -1:
+            return data
+
         return data[:pos - 1]
+
+    def writeBulkData(self, name, data):
+        # data = [[],[],...]
+        cursor = self.connection.cursor()
+        id = self.getIdFromName(name)
+        id = id[0]
+        season = 1
+
+        for s in data:
+            for e in s:
+                string = '''UPDATE info
+                                  SET seen = %d
+                                  WHERE series_id = %d
+                                  AND season = %d''' % (e, id, season)
+                print((string))
+                cursor.execute(string)
+            season += 1
+
+        self.connection.commit()
 
     def getIdFromName(self, name):
         cursor = self.connection.cursor()

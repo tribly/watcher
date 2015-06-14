@@ -36,7 +36,7 @@ class Watcher(tk.Tk):
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.showFrame(MarkPage)
+        self.showFrame(StartPage)
 
     def updateStatus(self, text):
         self.status_bar.config(text=text)
@@ -64,18 +64,30 @@ class Watcher(tk.Tk):
 
         if selection == 'kat':
             self.prepareKATLink(self.start_page_selection)
+            self.setWatched(self.start_page_selection)
+            self.frames[StartPage].fillNextList()
+
+            self.showFrame(StartPage)
         elif selection == 'watchseries':
+            self.setWatched(self.start_page_selection)
+            self.frames[StartPage].fillNextList()
+
+            self.showFrame(StartPage)
             self.prepareWSLink(self.start_page_selection)
         elif selection == 'only next':
+            self.setWatched(self.start_page_selection)
+            self.frames[StartPage].fillNextList()
+
+            self.showFrame(StartPage)
             # TODO: placeholder
             pass
         elif selection == 'mark list':
-            pass
+            pos = self.start_page_selection.find('-')
+            name = self.start_page_selection[:pos - 1]
+            self.frames[MarkPage].setName(name)
+            self.frames[MarkPage].startSelection()
+            self.showFrame(MarkPage)
 
-        self.setWatched(self.start_page_selection)
-        self.frames[StartPage].fillNextList()
-
-        self.showFrame(StartPage)
 
     def setWatched(self, name):
         self.db.setWatched(name)
@@ -318,44 +330,73 @@ class WatchPage(tk.Frame):
 class MarkPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.scrollbar = tk.Scrollbar(self)
+        self.textbox = tk.Text(self, yscrollcommand = self.scrollbar.set)
 
         # TODO move to Watcher
         self.controller = controller
 
         self.var_list = []
 
-        #self.var_list.append(tk.IntVar())
-        #self.var_list.append(tk.IntVar())
-
         self.label = ttk.Label(self, takefocus=False)
-        self.button = ttk.Button(self, takefocus=False, command = self.actio)
+        self.button = ttk.Button(self, takefocus=False, command = self.testfun)
+
+        self.scrollbar.config(command = self.textbox.yview)
 
         ####
-        self.label.config(text = 'hihohahihohahihoha')
-        self.button.config(text = 'lala')
+        self.label.config(text = '')
+        self.button.config(text = 'Done')
         ###
-        #self.cb = ttk.Checkbutton(self)
-        #self.cb.config(text = 'testbutton', variable = self.var_list[0])
-        #self.cb2 = ttk.Checkbutton(self)
-        #self.cb2.config(text = 'testbutton', variable = self.var_list[1])
 
         self.label.grid(pady = "10", padx = 10, row = 0, column = 0, sticky = "w")
         self.button.grid(row = 0, column = 1, sticky = "w")
-        #self.cb.grid(row = 2, column = 0, sticky = "w")
-        #self.cb2.grid(row = 3, column = 0, padx = (35,0), sticky = "w")
+        self.textbox.grid(row = 1, sticky="NS")
+        self.scrollbar.grid(row = 1, column = 2, sticky = "NS")
+
+        self.textbox.config(width = 20, height = 10, bg = self["background"], bd = 0)
+        self.textbox.config(state = tk.DISABLED)
+
+    def setName(self, name):
+        self.label.config(text=name)
+
+    def testfun(self):
+        data = []
+        s = 0
+
+        for season in self.var_list:
+            data.append([])
+            for episode in season:
+                data[s].append(episode.get())
+            s += 1
+
+        self.controller.db.writeBulkData(self.label["text"], data)
+
+        self.controller.showFrame(StartPage)
+
+    def startSelection(self):
+        name = self.label["text"]
+        data = self.controller.db.getSeasonEpisodeData(name)
+        print(data)
+        self.fillVarList(data)
+        self.textbox.config(state = tk.NORMAL)
+        self.populateMenu()
+        self.textbox.config(state = tk.DISABLED)
 
     def populateMenu(self):
         row = 1
         season_count = 1
         episode_count = 1
         for season in self.var_list:
+            self.textbox.insert(tk.END, "Season " + str(season_count))
             for episode in season:
-                cb = ttk.Checkbutton(self, variable = episode, text = episode_count)
-                cb.grid(row = row, column = 0)
+                cb = ttk.Checkbutton(self, variable = episode, text = "Episode " + str(episode_count))
+                self.textbox.insert(tk.END, "\n")
+                self.textbox.window_create(tk.END, window = cb)
                 episode_count += 1
                 row += 1
-            break
-            episode_count = 0
+
+            self.textbox.insert(tk.END, "\n\n")
+            episode_count = 1
             season_count += 1
 
     def fillVarList(self, data):
@@ -364,12 +405,9 @@ class MarkPage(tk.Frame):
             for n in range(data[season]):
                 self.var_list[season - 1].append(tk.IntVar())
 
-
     # TODO: refactor
     def actio(self):
-        data = self.controller.db.getSeasonEpisodeData('Family Guy -')
-        self.fillVarList(data)
-        self.populateMenu()
+        print('implement that crap')
 
     def setLabel(self, text):
         self.label.config(text = text)
