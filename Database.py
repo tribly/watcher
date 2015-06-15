@@ -22,7 +22,7 @@ class Database():
         cursor = self.connection.cursor()
         id = (id,)
 
-        cursor.execute('''SELECT name, series_id, season, episode
+        cursor.execute('''SELECT name, series_id, season, episode, date
                         FROM info
                         WHERE seen = 0
                         AND series_ID = ?

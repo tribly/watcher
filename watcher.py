@@ -8,6 +8,7 @@ import SeriesInfo
 import XMLParser
 import Database
 import webbrowser
+import datetime
 
 class Watcher(tk.Tk):
 
@@ -16,6 +17,7 @@ class Watcher(tk.Tk):
         self.fetcher = SeriesInfo.SeriesInfo()
         self.xml = XMLParser.XMLParser()
         self.db = Database.Database()
+        self.today = datetime.date.today()
 
         self.start_page_selection = ""
 
@@ -145,6 +147,18 @@ class Watcher(tk.Tk):
         self.db.closeDB()
         self.destroy()
 
+    def checkDates(self, data):
+        next_list = []
+
+        for series in data:
+            air_date = datetime.datetime.strptime(series[4], "%Y-%m-%d")
+            air_date = air_date.date()
+
+            if self.today >= air_date:
+                next_list.append(series)
+
+        return next_list
+
 
 class StartPage(ttk.Frame):
     def __init__(self, parent, controller):
@@ -161,11 +175,11 @@ class StartPage(ttk.Frame):
         self.addSeriesBox.bind('<Return>', self.addSeries)
         self.addSeriesBox.bind('<Double-Button-1>', self.addSeries)
 
-        self.fillNextList()
-
         self.addSeriesBox.grid(pady = "10")
         self.listbox.grid()
         self.listbox.focus_set()
+
+        self.fillNextList()
 
         self.search_dict = {}
 
@@ -177,6 +191,8 @@ class StartPage(ttk.Frame):
 
         for id in series_ids:
             series_next.append(self.controller.db.getNext(id[0]))
+
+        series_next = self.controller.checkDates(series_next)
 
         pretty_info = self.compactInfo(series_next)
 
