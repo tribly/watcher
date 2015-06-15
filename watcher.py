@@ -74,7 +74,7 @@ class Watcher(tk.Tk):
 
             self.showFrame(StartPage)
             self.prepareWSLink(self.start_page_selection)
-        elif selection == 'only next':
+        elif selection == 'set watched':
             self.setWatched(self.start_page_selection)
             self.frames[StartPage].fillNextList()
 
@@ -152,7 +152,7 @@ class StartPage(ttk.Frame):
 
         self.controller = controller
 
-        self.listbox = tk.Listbox(self, height = 10)
+        self.listbox = tk.Listbox(self, height = 10, width = 30)
         self.listbox.bind('<Return>', self.controller.getSelectionStart)
         self.listbox.bind('<Double-Button-1>', self.controller.getSelectionStart)
 
@@ -283,7 +283,7 @@ class SearchPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.config(takefocus=False)
 
-        self.listbox = tk.Listbox(self, takefocus=False)
+        self.listbox = tk.Listbox(self, takefocus=False, width = 30)
         self.listbox.bind('<Return>', controller.getSelectionSearch)
         self.listbox.bind('<Double-Button-1>', controller.getSelectionSearch)
 
@@ -306,10 +306,10 @@ class WatchPage(tk.Frame):
 
         self.label = ttk.Label(self, takefocus=False)
 
-        self.listbox = tk.Listbox(self, takefocus=False)
+        self.listbox = tk.Listbox(self, takefocus=False, width = 30)
         self.listbox.insert(tk.END, 'kat')
         self.listbox.insert(tk.END, 'watchseries')
-        self.listbox.insert(tk.END, 'only next')
+        self.listbox.insert(tk.END, 'set watched')
         self.listbox.insert(tk.END, 'mark list')
         self.listbox.bind('<Return>', controller.getSelectionWatch)
         self.listbox.bind('<Double-Button-1>', controller.getSelectionWatch)
@@ -353,7 +353,7 @@ class MarkPage(tk.Frame):
         self.textbox.grid(row = 1, sticky="NS")
         self.scrollbar.grid(row = 1, column = 2, sticky = "NS")
 
-        self.textbox.config(width = 20, height = 10, bg = self["background"], bd = 0)
+        self.textbox.config(width = 30, height = 10, bg = self["background"], bd = 0)
         self.textbox.config(state = tk.DISABLED)
 
     def setName(self, name):
@@ -396,7 +396,8 @@ class MarkPage(tk.Frame):
         for season in self.var_list:
             self.textbox.insert(tk.END, "Season " + str(season_count))
             for episode in season:
-                cb = ttk.Checkbutton(self, variable = episode, text = "Episode " + str(episode_count))
+                cb = ttk.Checkbutton(self, variable = episode,
+                                     text = "Episode " + str(episode_count))
                 if episode == 1:
                     cb.config(state = tk.ACTIVE)
                 self.textbox.insert(tk.END, "\n")
@@ -417,21 +418,15 @@ class MarkPage(tk.Frame):
                 self.var_list[season_index].append(val)
             season_index += 1
 
-    # TODO: refactor
-    def actio(self):
-        print('implement that crap')
-
     def setLabel(self, text):
         self.label.config(text = text)
 
     def setTakeFocus(self):
-        pass
-        #self.listbox.config(takefocus=True)
-        #self.listbox.focus_set()
+        self.textbox.config(takefocus=True)
+        self.textbox.focus_set()
 
     def unsetTakeFocus(self):
-        pass
-        #self.listbox.config(takefocus=False)
+        self.textbox.config(takefocus=False)
 
 if __name__ == "__main__":
     app = Watcher()
