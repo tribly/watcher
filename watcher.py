@@ -350,7 +350,7 @@ class MarkPage(tk.Frame):
 
         self.label.grid(pady = "10", padx = 10, row = 0, column = 0, sticky = "w")
         self.button.grid(row = 0, column = 1, sticky = "w")
-        self.textbox.grid(row = 1, sticky="NS")
+        self.textbox.grid(row = 1, columnspan = 2, sticky="NS")
         self.scrollbar.grid(row = 1, column = 2, sticky = "NS")
 
         self.textbox.config(width = 30, height = 10, bg = self["background"], bd = 0)
