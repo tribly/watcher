@@ -80,16 +80,19 @@ class Database():
         id = self.getIdFromName(name)
         id = id[0]
         season = 1
+        episode = 1
 
         for s in data:
             for e in s:
                 string = '''UPDATE info
-                                  SET seen = %d
-                                  WHERE series_id = %d
-                                  AND season = %d''' % (e, id, season)
-                print((string))
+                            SET seen = %d
+                            WHERE series_id = %d
+                            AND season = %d
+                            AND episode = %d''' % (e, id, season, episode)
                 cursor.execute(string)
+                episode += 1
             season += 1
+            episode = 1
 
         self.connection.commit()
 
