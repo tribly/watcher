@@ -40,6 +40,12 @@ class Watcher(tk.Tk):
 
         self.showFrame(StartPage)
 
+    def checkIfExists(self, name):
+        if self.db.getIdFromName(name) == None:
+            return True
+        else:
+            return False
+
     def updateStatus(self, text):
         self.status_bar.config(text=text)
         self.status_bar.update_idletasks()
@@ -254,14 +260,17 @@ class StartPage(ttk.Frame):
             self.controller.fillSearchList(names)
         else:
             for k in self.search_dict.keys():
-                self.controller.updateStatus('fetching info for: ' + k)
                 self.addSeries2(k)
-                self.controller.updateStatus('added: ' + k)
 
     def addSeries2(self, name):
+        if not self.controller.checkIfExists(name):
+            self.controller.updateStatus('Already in database')
+            return False
+
         selected_series_id = self.search_dict[name]
 
         # html
+        self.controller.updateStatus('fetching info for: ' + name)
         complete_info = self.getSeriesInfo(selected_series_id)
         # xml
         compact_info = self.controller.xml.getSeriesInfo(complete_info)
@@ -280,6 +289,8 @@ class StartPage(ttk.Frame):
 
         self.controller.db.writeData(db_info)
         self.fillNextList()
+        self.controller.updateStatus('added: ' + name)
+        return True
 
     def getSeriesInfo(self, id):
         return self.controller.fetcher.getSeriesInfo(id)
