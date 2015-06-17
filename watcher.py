@@ -35,12 +35,11 @@ class Watcher(tk.Tk):
         self.bind('<Control-q>', self.closeApp)
 
         self.frames = {}
-        #self.startpage = StartPage.StartPage(self.container, self)
-        #self.searchpage = SearchPage.SearchPage(self.container, self)
-        #self.watchpage = WatchPage.WatchPage(self.container, self)
-        #self.markpage = MarkPage.MarkPage(self.container, self)
 
-        for F in (StartPage.StartPage, SearchPage.SearchPage, WatchPage.WatchPage, MarkPage.MarkPage):
+        for F in (StartPage.StartPage,
+                  SearchPage.SearchPage,
+                  WatchPage.WatchPage,
+                  MarkPage.MarkPage):
             frame = F(self.container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
