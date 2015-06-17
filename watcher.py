@@ -5,14 +5,14 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import SeriesItem
 import SeriesInfo
-import MarkPage
-import SearchPage
-import StartPage
-import WatchPage
 import XMLParser
 import Database
 import webbrowser
 import datetime
+from MarkPage import MarkPage
+from SearchPage import SearchPage
+from StartPage import StartPage
+from WatchPage import WatchPage
 
 class Watcher(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -36,15 +36,15 @@ class Watcher(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage.StartPage,
-                  SearchPage.SearchPage,
-                  WatchPage.WatchPage,
-                  MarkPage.MarkPage):
+        for F in (StartPage,
+                  SearchPage,
+                  WatchPage,
+                  MarkPage):
             frame = F(self.container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.showFrame(StartPage.StartPage)
+        self.showFrame(StartPage)
 
     def checkIfExists(self, name):
         if self.db.getIdFromName(name) == None:
@@ -61,46 +61,46 @@ class Watcher(tk.Tk):
         self.status_bar.update_idletasks()
 
     def fillSearchList(self, array):
-        self.frames[SearchPage.SearchPage].fillListbox(array)
-        self.showFrame(SearchPage.SearchPage)
+        self.frames[SearchPage].fillListbox(array)
+        self.showFrame(SearchPage)
 
     def getSelectionSearch(self, event):
-        entry = self.frames[SearchPage.SearchPage].listbox.curselection()
-        selection = self.frames[SearchPage.SearchPage].listbox.get(entry)
+        entry = self.frames[SearchPage].listbox.curselection()
+        selection = self.frames[SearchPage].listbox.get(entry)
 
-        self.frames[StartPage.StartPage].addSeries2(selection)
+        self.frames[StartPage].addSeries2(selection)
 
-        self.showFrame(StartPage.StartPage)
+        self.showFrame(StartPage)
 
     def getSelectionWatch(self, event):
-        entry = self.frames[WatchPage.WatchPage].listbox.curselection()
-        selection = self.frames[WatchPage.WatchPage].listbox.get(entry)
+        entry = self.frames[WatchPage].listbox.curselection()
+        selection = self.frames[WatchPage].listbox.get(entry)
 
         if selection == 'kat':
             self.prepareKATLink(self.start_page_selection)
             self.setWatched(self.start_page_selection)
-            self.frames[StartPage.StartPage].fillNextList()
+            self.frames[StartPage].fillNextList()
 
-            self.showFrame(StartPage.StartPage)
+            self.showFrame(StartPage)
         elif selection == 'watchseries':
             self.setWatched(self.start_page_selection)
-            self.frames[StartPage.StartPage].fillNextList()
+            self.frames[StartPage].fillNextList()
 
-            self.showFrame(StartPage.StartPage)
+            self.showFrame(StartPage)
             self.prepareWSLink(self.start_page_selection)
         elif selection == 'set watched':
             self.setWatched(self.start_page_selection)
-            self.frames[StartPage.StartPage].fillNextList()
+            self.frames[StartPage].fillNextList()
 
-            self.showFrame(StartPage.StartPage)
+            self.showFrame(StartPage)
             # TODO: placeholder
             pass
         elif selection == 'mark list':
             pos = self.start_page_selection.find('-')
             name = self.start_page_selection[:pos - 1]
-            self.frames[MarkPage.MarkPage].setName(name)
-            self.frames[MarkPage.MarkPage].startSelection()
-            self.showFrame(MarkPage.MarkPage)
+            self.frames[MarkPage].setName(name)
+            self.frames[MarkPage].startSelection()
+            self.showFrame(MarkPage)
 
 
     def setWatched(self, name):
@@ -137,13 +137,13 @@ class Watcher(tk.Tk):
         webbrowser.open(url)
 
     def getSelectionStart(self, event):
-        entry = self.frames[StartPage.StartPage].listbox.curselection()
-        selection = self.frames[StartPage.StartPage].listbox.get(entry)
+        entry = self.frames[StartPage].listbox.curselection()
+        selection = self.frames[StartPage].listbox.get(entry)
 
         self.start_page_selection = selection
 
-        self.frames[WatchPage.WatchPage].setLabel(self.start_page_selection)
-        self.showFrame(WatchPage.WatchPage)
+        self.frames[WatchPage].setLabel(self.start_page_selection)
+        self.showFrame(WatchPage)
 
     def showFrame(self, to_show):
         frame = self.frames[to_show]
