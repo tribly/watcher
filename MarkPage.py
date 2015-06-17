@@ -48,8 +48,8 @@ class MarkPage(tk.Frame):
 
         self.controller.db.writeBulkData(self.label["text"], data)
 
-        self.controller.frames[StartPage].fillNextList()
-        self.controller.showFrame(StartPage)
+        self.controller.frames[StartPage.StartPage].fillNextList()
+        self.controller.showFrame(StartPage.StartPage)
 
     def clearBoxes(self):
         self.var_list = []
