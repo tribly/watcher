@@ -179,7 +179,6 @@ class StartPage(ttk.Frame):
         self.addSeriesBox = ttk.Entry(self)
         self.addSeriesBox.insert(tk.END, "Add series...")
         self.addSeriesBox.bind('<Return>', self.addSeries)
-        self.addSeriesBox.bind('<Double-Button-1>', self.addSeries)
 
         self.addSeriesBox.grid(pady = "10")
         self.listbox.grid()
