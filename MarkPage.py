@@ -3,6 +3,7 @@
 
 import tkinter as tk
 import tkinter.ttk as ttk
+from StartPage import StartPage
 
 class MarkPage(tk.Frame):
     def __init__(self, parent, controller):
