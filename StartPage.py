@@ -33,7 +33,12 @@ class StartPage(ttk.Frame):
         series_next = []
 
         for id in series_ids:
-            series_next.append(self.controller.db.getNext(id[0]))
+            series = self.controller.db.getNext(id[0])
+
+            if series == None:
+                continue
+            else:
+                series_next.append(series)
 
         series_next = self.controller.checkDates(series_next)
 
