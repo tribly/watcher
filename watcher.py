@@ -166,7 +166,9 @@ class Watcher(tk.Tk):
             air_date = datetime.datetime.strptime(series[4], "%Y-%m-%d")
             air_date = air_date.date()
 
-            if self.today >= air_date:
+            american_today = self.today - datetime.timedelta(1)
+
+            if american_today >= air_date:
                 next_list.append(series)
 
         return next_list
