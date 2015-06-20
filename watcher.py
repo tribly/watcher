@@ -78,7 +78,7 @@ class Watcher(tk.Tk):
 
         if selection == 'kat':
             self.prepareKATLink(self.start_page_selection)
-            self.setWatched(self.start_page_selection)
+            #self.setWatched(self.start_page_selection)
             self.frames[StartPage].fillNextList()
 
             self.showFrame(StartPage)
