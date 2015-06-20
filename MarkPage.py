@@ -124,7 +124,7 @@ class MarkPage(tk.Frame):
                 cb_season.append(cb)
                 if episode == 1:
                     cb.config(state = tk.ACTIVE)
-                self.textbox.insert(tk.END, "\n")
+                self.textbox.insert(tk.END, "\n  ")
                 self.textbox.window_create(tk.END, window = cb)
                 episode_count += 1
 
