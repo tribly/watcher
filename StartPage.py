@@ -26,7 +26,7 @@ class StartPage(ttk.Frame):
 
         self.addSeriesBox.grid(row = 0, column = 0, pady = "10")
         self.listbox.grid(row = 1, column = 0)
-        self.label_upcoming.grid(row = 2, column = 0, sticky = "W")
+        self.label_upcoming.grid(row = 2, column = 0, sticky = "W", pady = (10,0))
         self.listbox_upcoming.grid(row = 3, column = 0)
         self.listbox.focus_set()
 
