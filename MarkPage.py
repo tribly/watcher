@@ -15,6 +15,8 @@ class MarkPage(tk.Frame):
         self.controller = controller
 
         self.var_list = []
+        self.mark_season = []
+        self.cb_ep_list = []
 
         self.label = ttk.Label(self, takefocus=False)
         self.button = ttk.Button(self, takefocus=False, command = self.testfun)
@@ -58,8 +60,13 @@ class MarkPage(tk.Frame):
         self.textbox.delete("1.0", tk.END)
         self.textbox.config(state = tk.DISABLED)
 
+    def clearVars(self):
+        self.var_list = []
+        self.mark_season = []
+
     def startSelection(self):
         self.clearBoxes()
+        self.clearVars()
         name = self.label["text"]
         data = self.controller.db.getSeasonEpisodeData(name)
         self.fillVarList(data)
@@ -67,21 +74,63 @@ class MarkPage(tk.Frame):
         self.populateMenu()
         self.textbox.config(state = tk.DISABLED)
 
+    def markSeason(self):
+        season_nr = 1
+        for season in self.mark_season:
+            state = season.get()
+
+            for episode in self.var_list[season_nr - 1]:
+                if state == 1:
+                    episode.set(1)
+                else:
+                    episode.set(0)
+
+            for cb in self.cb_ep_list[season_nr - 1]:
+                if state == 1:
+                    cb.config(state = tk.ACTIVE)
+                else:
+                    cb.config(state = tk.NORMAL)
+
+            season_nr += 1
+
+    def seasonWatched(self, nr):
+        for episode in self.var_list[nr - 1]:
+            if episode.get() == 0:
+                print(False)
+                return False
+
+        return True
+
     def populateMenu(self):
         season_count = 1
         episode_count = 1
+        cb_season = []
 
         for season in self.var_list:
-            self.textbox.insert(tk.END, "Season " + str(season_count))
+            self.mark_season.append(tk.IntVar())
+            cb = ttk.Checkbutton(self, variable = self.mark_season[season_count - 1],
+                                 text = "Season " + str(season_count),
+                                 command = self.markSeason)
+
+            self.textbox.insert(tk.END, "\n")
+            self.textbox.window_create(tk.END, window = cb)
+
+            if self.seasonWatched(season_count):
+                self.mark_season[season_count - 1].set(1)
+                cb.config(state = tk.ACTIVE)
+
             for episode in season:
                 cb = ttk.Checkbutton(self, variable = episode,
                                      text = "Episode " + str(episode_count))
+                cb_season.append(cb)
                 if episode == 1:
                     cb.config(state = tk.ACTIVE)
                 self.textbox.insert(tk.END, "\n")
                 self.textbox.window_create(tk.END, window = cb)
                 episode_count += 1
 
+            self.cb_ep_list.append(cb_season)
+            cb_season = []
             self.textbox.insert(tk.END, "\n\n")
             episode_count = 1
             season_count += 1
