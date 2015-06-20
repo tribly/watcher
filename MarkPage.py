@@ -112,7 +112,6 @@ class MarkPage(tk.Frame):
                                  text = "Season " + str(season_count),
                                  command = self.markSeason)
 
-            self.textbox.insert(tk.END, "\n")
             self.textbox.window_create(tk.END, window = cb)
 
             if self.seasonWatched(season_count):
