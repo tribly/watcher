@@ -31,8 +31,29 @@ class StartPage(ttk.Frame):
         self.listbox.focus_set()
 
         self.fillNextList()
+        self.fillUpcomingList()
 
         self.search_dict = {}
+
+    def fillUpcomingList(self):
+        series_ids = self.controller.db.getUniqueIDs()
+
+        series_upcoming = []
+
+        for id in series_ids:
+            series = self.controller.db.getNext(id[0])
+
+            if series == None:
+                continue
+            else:
+                series_upcoming.append(series)
+
+        series_upcoming = self.controller.checkUpcoming(series_upcoming)
+
+        pretty_info = self.compactInfo(series_upcoming, True)
+
+        for series in pretty_info:
+            self.listbox_upcoming.insert(tk.END, series)
 
     def fillNextList(self):
         self.listbox.delete(0, tk.END)
@@ -55,7 +76,7 @@ class StartPage(ttk.Frame):
         for series in pretty_info:
             self.listbox.insert(tk.END, series)
 
-    def compactInfo(self, data):
+    def compactInfo(self, data, upcoming = False):
         total_info = []
 
         for series in data:
@@ -64,12 +85,15 @@ class StartPage(ttk.Frame):
             to_short.append(series[2])
             to_short.append(series[3])
 
-            info_string = self.concInfo(to_short)
+            if upcoming:
+                to_short.append(series[5])
+
+            info_string = self.concInfo(to_short, upcoming)
             total_info.append(info_string)
 
         return total_info
 
-    def concInfo(self, data):
+    def concInfo(self, data, upcoming = False):
         info_string = ""
 
         if data[1] < 10:
@@ -83,6 +107,9 @@ class StartPage(ttk.Frame):
             data[2] = str(data[2])
 
         info_string += data[0] + ' - s' + data[1] + 'e' + data[2]
+
+        if upcoming:
+            info_string += data[3]
 
         return info_string
 

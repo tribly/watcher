@@ -173,7 +173,36 @@ class Watcher(tk.Tk):
 
         return next_list
 
+    def checkUpcoming(self, data):
+        upcoming_list = []
 
+        for series in data:
+            air_date = datetime.datetime.strptime(series[4], "%Y-%m-%d")
+            air_date = air_date.date()
+
+            american_today = self.today - datetime.timedelta(1)
+            delta = self.calculateTimedelta(air_date)
+
+            if delta >= 0:
+                continue
+
+            if delta == -1:
+                days = ' day'
+            else:
+                days = ' days'
+
+            date_tup = (' - in ' + str(abs(delta)) + days,)
+            series = series + date_tup
+            upcoming_list.append(series)
+
+        return upcoming_list
+
+    def calculateTimedelta(self, date):
+        american_today = self.today - datetime.timedelta(1)
+
+        delta = (american_today - date).days
+
+        return delta
 
 
 if __name__ == "__main__":
