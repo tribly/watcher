@@ -14,12 +14,20 @@ class StartPage(ttk.Frame):
         self.listbox.bind('<Return>', self.controller.getSelectionStart)
         self.listbox.bind('<Double-Button-1>', self.controller.getSelectionStart)
 
+        self.listbox_upcoming = tk.Listbox(self, height = 10, width = 30)
+        self.listbox_upcoming.bind('<Return>')
+        self.listbox_upcoming.bind('<Double-Button-1>')
+
+        self.label_upcoming = tk.Label(self, text="Upcoming")
+
         self.addSeriesBox = ttk.Entry(self)
         self.addSeriesBox.insert(tk.END, "Add series...")
         self.addSeriesBox.bind('<Return>', self.addSeries)
 
-        self.addSeriesBox.grid(pady = "10")
-        self.listbox.grid()
+        self.addSeriesBox.grid(row = 0, column = 0, pady = "10")
+        self.listbox.grid(row = 1, column = 0)
+        self.label_upcoming.grid(row = 2, column = 0, sticky = "W")
+        self.listbox_upcoming.grid(row = 3, column = 0)
         self.listbox.focus_set()
 
         self.fillNextList()
