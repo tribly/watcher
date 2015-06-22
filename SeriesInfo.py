@@ -6,10 +6,36 @@ import urllib.request
 class SeriesInfo():
 
     def __init__(self):
+        self.api_key = 'F8F34A2596D16932'
         self.search_url = 'http://thetvdb.com/api/GetSeries.php?seriesname='
-        self.series_info = 'http://thetvdb.com/api/F8F34A2596D16932/series/'
+        self.series_info = 'http://thetvdb.com/api/%s/series/' % self.api_key
+        self.get_time = 'http://thetvdb.com/api/Updates.php?type=none'
+        self.updates = 'http://thetvdb.com/api/Updates.php?type=all&time='
 
     def downloadXML(self, url):
+        html = urllib.request.urlopen(url)
+        data = html.read()
+
+        return data
+
+    def getServerTime(self):
+        """Get the current server time
+        @return: @todo
+
+        """
+        html = urllib.request.urlopen(self.get_time)
+        data = html.read()
+
+        return data
+
+    def getUpdates(self, time):
+        """Download the updates since time
+
+        @param time - int
+        @return: @todo
+
+        """
+        url = self.updates + str(time)
         html = urllib.request.urlopen(url)
         data = html.read()
 

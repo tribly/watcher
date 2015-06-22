@@ -18,6 +18,21 @@ class Database():
     def closeDB(self):
         self.connection.close()
 
+    def writeTime(self, time):
+        """Write the last update time to db
+
+        @param time - int - in sec
+        @return: @todo
+
+        """
+        cursor = self.connection.cursor()
+        time = (time,)
+
+        cursor.execute('''UPDATE conf
+                          set last_update = ?''', time)
+
+        self.connection.commit()
+
     def getNext(self, id):
         cursor = self.connection.cursor()
         id = (id,)
@@ -48,7 +63,34 @@ class Database():
 
         return cursor.fetchall()
 
+    def getSeasons(self, series_id):
+        """Get all seasons from a specific series
+
+        @param series_id @todo
+        @return: @todo
+
+        """
+        cursor = self.connection.cursor()
+        series_id = (series_id,)
+
+        cursor.execute('''SELECT season
+                          FROM info
+                          WHERE series_id = ?''', series_id)
+        seasons = []
+
+        for season in cursor.fetchall():
+            if season[0] not in seasons:
+                seasons.append(season[0])
+
+        return seasons
+
     def writeData(self, data):
+        """Write the data to the db
+
+        @param data [name, id, season, episode, air_date]
+        @return: @todo
+
+        """
         cursor = self.connection.cursor()
 
         proper = []
@@ -65,6 +107,22 @@ class Database():
 
         cursor.executemany('INSERT INTO info VALUES(NULL, ?, ?, ?, ?, ?, 0)', proper)
         self.connection.commit()
+
+    def getNameFromID(self, series_id):
+        """Get the name from the id
+
+        @param name @todo
+        @return: @todo
+
+        """
+        cursor = self.connection.cursor()
+        series_id = (series_id,)
+
+        cursor.execute('''SELECT name
+                          FROM info
+                          WHERE series_id = ?''', series_id)
+
+        return cursor.fetchone()[0]
 
     def extractName(self, data):
         pos = data.find('-')
@@ -95,6 +153,28 @@ class Database():
             episode = 1
 
         self.connection.commit()
+
+    def checkForSeason(self, season, series_id):
+        """Check if the season is present in the series
+
+        @param season - int
+        @param series_id - int
+        @return: @todo
+
+        """
+        cursor = self.connection.cursor()
+
+        data = (season,series_id )
+
+        cursor.execute('''SELECT season
+                          FROM info
+                          WHERE season = ?
+                          AND series_id = ?''', data)
+
+        if cursor.fetchone() == None:
+            return False
+        else:
+            return True
 
     def getIdFromName(self, name):
         cursor = self.connection.cursor()
@@ -148,6 +228,15 @@ class Database():
 
         return data
 
+    def getLastUpdate(self):
+        cursor = self.connection.cursor()
+
+        cursor.execute('''SELECT last_update
+                          FROM conf
+                       ''')
+
+        return cursor.fetchone()[0]
+
     def createDB(self):
         connection = sqlite3.connect('series.db')
         cursor = connection.cursor()
@@ -160,6 +249,11 @@ class Database():
                           "episode" INTEGER NOT NULL,
                           "date" TEXT NOT NULL,
                           "seen" INTEGER NOT NULL
+                          )''')
+
+        cursor.execute('''CREATE TABLE "conf" (
+                          "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+                          "last_update" INTEGER
                           )''')
 
         connection.commit()

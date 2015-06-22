@@ -1,4 +1,6 @@
 series.db
+series.db.bkp
 __pycache__/*
 info.xml
 info2.xml
+test.py

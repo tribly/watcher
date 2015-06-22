@@ -13,6 +13,7 @@ from MarkPage import MarkPage
 from SearchPage import SearchPage
 from StartPage import StartPage
 from WatchPage import WatchPage
+from UpdateSeries import UpdateSeries
 
 class Watcher(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -20,6 +21,7 @@ class Watcher(tk.Tk):
         self.fetcher = SeriesInfo.SeriesInfo()
         self.xml = XMLParser.XMLParser()
         self.db = Database.Database()
+        self.updater = UpdateSeries()
         self.today = datetime.date.today()
 
         self.start_page_selection = ""
@@ -45,6 +47,16 @@ class Watcher(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.showFrame(StartPage)
+        self.fetchUpdates()
+
+    def fetchUpdates(self):
+        """Fetch the newest updates for series
+        @return: @todo
+
+        """
+        self.updateStatus('Updating series')
+        self.updater.getSeriesUpdates()
+        self.updateStatus('Finished updating series')
 
     def checkIfExists(self, name):
         if self.db.getIdFromName(name) == None:

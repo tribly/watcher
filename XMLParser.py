@@ -9,7 +9,6 @@ class XMLParser():
         pass
 
     def getSeriesInfo(self, data):
-        # TODO: ET.parse to ET.fromstring
         root = ET.fromstring(data)
         series_info = []
         season = 1
@@ -33,6 +32,30 @@ class XMLParser():
             series_info.append(info)
 
         return series_info
+
+    def separateSeriesEpisodes(self, data):
+        root = ET.fromstring(data)
+        series = []
+        episodes = []
+
+        for element in root:
+            if element.tag == "Series":
+                series.append(element.text)
+            elif element.tag == "Episode":
+                episodes.append(element.text)
+
+        return [series, episodes]
+
+    def extractTime(self, data):
+        """Extract the time from the given data
+
+        @param data @todo
+        @return: @root time in sec as str
+
+        """
+        root = ET.fromstring(data)
+
+        return root[0].text
 
     def searchSeries(self, xml):
         root = ET.fromstring(xml)
