@@ -32,6 +32,7 @@ class Database():
                           set last_update = ?''', time)
 
         self.connection.commit()
+        cursor.close()
 
     def getNext(self, id):
         cursor = self.connection.cursor()
@@ -43,7 +44,9 @@ class Database():
                         AND series_ID = ?
                         ORDER BY date asc, episode asc''', id)
 
-        return cursor.fetchone()
+        data = cursor.fetchone()
+        cursor.close()
+        return data
 
     def getNextID(self, id):
         cursor = self.connection.cursor()
@@ -54,14 +57,18 @@ class Database():
                         AND series_ID = ?
                         ORDER BY date asc, episode asc''', id)
 
-        return cursor.fetchone()
+        data = cursor.fetchone()
+        cursor.close()
+        return data
 
     def getUniqueIDs(self):
         cursor = self.connection.cursor()
 
         cursor.execute('SELECT DISTINCT series_ID FROM info')
 
-        return cursor.fetchall()
+        data = cursor.fetchall()
+        cursor.close()
+        return data
 
     def getSeasons(self, series_id):
         """Get all seasons from a specific series
@@ -82,6 +89,7 @@ class Database():
             if season[0] not in seasons:
                 seasons.append(season[0])
 
+        cursor.close()
         return seasons
 
     def writeData(self, data):
@@ -107,6 +115,7 @@ class Database():
 
         cursor.executemany('INSERT INTO info VALUES(NULL, ?, ?, ?, ?, ?, 0)', proper)
         self.connection.commit()
+        cursor.close()
 
     def getNameFromID(self, series_id):
         """Get the name from the id
@@ -122,7 +131,10 @@ class Database():
                           FROM info
                           WHERE series_id = ?''', series_id)
 
-        return cursor.fetchone()[0]
+
+        data = cursor.fetchone()[0]
+        cursor.close()
+        return data
 
     def extractName(self, data):
         pos = data.find('-')
@@ -153,6 +165,7 @@ class Database():
             episode = 1
 
         self.connection.commit()
+        cursor.close()
 
     def checkForSeason(self, season, series_id):
         """Check if the season is present in the series
@@ -172,8 +185,10 @@ class Database():
                           AND series_id = ?''', data)
 
         if cursor.fetchone() == None:
+            cursor.close()
             return False
         else:
+            cursor.close()
             return True
 
     def getIdFromName(self, name):
@@ -185,6 +200,7 @@ class Database():
                           WHERE name = ?''', name)
 
         series_id = cursor.fetchone()
+        cursor.close()
         return series_id
 
     def setWatched(self, name):
@@ -198,6 +214,7 @@ class Database():
                           SET seen = 1
                           WHERE id = ?''', next_)
         self.connection.commit()
+        cursor.close()
 
     def getSeasonEpisodeData(self, name):
         cursor = self.connection.cursor()
@@ -226,6 +243,7 @@ class Database():
             for e in nr_episodes:
                 data[season].append(e[0])
 
+        cursor.close()
         return data
 
     def getLastUpdate(self):
@@ -235,7 +253,9 @@ class Database():
                           FROM conf
                        ''')
 
-        return cursor.fetchone()[0]
+        data = cursor.fetchone()[0]
+        cursor.close()
+        return data
 
     def createDB(self):
         connection = sqlite3.connect('series.db')
@@ -257,4 +277,5 @@ class Database():
                           )''')
 
         connection.commit()
+        cursor.close()
         return connection
