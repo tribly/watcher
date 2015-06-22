@@ -96,7 +96,6 @@ class MarkPage(tk.Frame):
     def seasonWatched(self, nr):
         for episode in self.var_list[nr - 1]:
             if episode.get() == 0:
-                print(False)
                 return False
 
         return True
