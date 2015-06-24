@@ -21,7 +21,7 @@ class Watcher(tk.Tk):
         self.fetcher = SeriesInfo.SeriesInfo()
         self.xml = XMLParser.XMLParser()
         self.db = Database.Database()
-        self.updater = UpdateSeries()
+        self.updater = UpdateSeries(self)
         self.today = datetime.date.today()
 
         self.start_page_selection = ""
@@ -54,9 +54,7 @@ class Watcher(tk.Tk):
         @return: @todo
 
         """
-        self.updateStatus('Updating series')
-        self.updater.getSeriesUpdates()
-        self.updateStatus('Finished updating series')
+        self.updater.start()
 
     def checkIfExists(self, name):
         if self.db.getIdFromName(name) == None:

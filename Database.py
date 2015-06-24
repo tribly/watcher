@@ -13,7 +13,7 @@ class Database():
         if not os.path.isfile('./series.db'):
             return self.createDB()
         else:
-            return sqlite3.connect('series.db')
+            return sqlite3.connect('series.db', check_same_thread=False)
 
     def closeDB(self):
         self.connection.close()

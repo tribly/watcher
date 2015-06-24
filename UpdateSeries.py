@@ -1,17 +1,26 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import threading
+
 from SeriesInfo import SeriesInfo
 from XMLParser import XMLParser
 from Database import Database
 
-class UpdateSeries():
+class UpdateSeries(threading.Thread):
     """Update the series at startup"""
 
-    def __init__(self):
+    def __init__(self, controller):
+        threading.Thread.__init__(self)
+        self.controller = controller
         self.html_handler = SeriesInfo()
         self.xml_handler = XMLParser()
         self.db_handler = Database()
+
+    def run(self):
+        self.controller.updateStatus('updating series')
+        self.getSeriesUpdates()
+        self.controller.updateStatus('done updating series')
 
     def getServerTime(self):
         """@todo: Docstring for getServerTime
