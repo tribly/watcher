@@ -51,6 +51,7 @@ class StartPage(ttk.Frame):
         self.menu_button.menu = tk.Menu(self.menu_button, tearoff = False)
         self.menu_button["menu"] = self.menu_button.menu
 
+        #TODO: implement
         #self.menu_button.menu.add_command(command = self.openEditPage,
                                           #label = "Edit series")
         self.menu_button.menu.add_separator()
