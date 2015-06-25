@@ -9,6 +9,7 @@ class WatchPage(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         self.label = ttk.Label(self, takefocus=False)
+        self.label.grid(pady = "10")
 
         self.listbox = tk.Listbox(self, takefocus=False, width = 30)
         self.listbox.insert(tk.END, 'kat')
@@ -17,8 +18,6 @@ class WatchPage(tk.Frame):
         self.listbox.insert(tk.END, 'mark list')
         self.listbox.bind('<Return>', controller.getSelectionWatch)
         self.listbox.bind('<Double-Button-1>', controller.getSelectionWatch)
-
-        self.label.grid(pady = "10")
         self.listbox.grid()
 
     def setLabel(self, text):

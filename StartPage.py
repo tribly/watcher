@@ -10,31 +10,35 @@ class StartPage(ttk.Frame):
     def __init__(self, parent, controller):
         ttk.Frame.__init__(self, parent)
 
+        self.controller = controller
         self.menu_image = ImageTk.PhotoImage(Image.open('assets/menu_button.png'))
 
-        self.controller = controller
-
-        self.listbox = tk.Listbox(self, height = 10, width = 30)
+        self.listbox = tk.Listbox(self)
+        self.listbox.config(height = 10, width = 30)
         self.listbox.bind('<Return>', self.controller.getSelectionStart)
         self.listbox.bind('<Double-Button-1>', self.controller.getSelectionStart)
+        self.listbox.grid(row = 1, column = 0, columnspan = 2)
 
-        self.menu_button = tk.Menubutton(self, image = self.menu_image, relief = "raised")
+        self.menu_button = tk.Menubutton(self)
+        self.menu_button.config(image = self.menu_image)
+        self.menu_button.config(relief = "raised")
+        self.menu_button.grid(row = 0, column = 1, sticky = "E", pady = "5")
 
-        self.listbox_upcoming = tk.Listbox(self, height = 10, width = 30)
+        self.listbox_upcoming = tk.Listbox(self)
+        self.listbox_upcoming.config(height = 10, width = 30)
         self.listbox_upcoming.bind('<Return>')
         self.listbox_upcoming.bind('<Double-Button-1>')
+        self.listbox_upcoming.grid(row = 3, column = 0, columnspan = 2)
 
         self.label_upcoming = tk.Label(self, text="Upcoming")
+        self.label_upcoming.grid(row = 2, column = 0, sticky = "W",
+                                 pady = (10,0), columnspan = 2)
 
         self.addSeriesBox = ttk.Entry(self)
         self.addSeriesBox.insert(tk.END, "Add series...")
         self.addSeriesBox.bind('<Return>', self.addSeries)
-
         self.addSeriesBox.grid(row = 0, column = 0,  sticky = "W")
-        self.menu_button.grid(row = 0, column = 1, sticky = "E", pady = "5")
-        self.listbox.grid(row = 1, column = 0, columnspan = 2)
-        self.label_upcoming.grid(row = 2, column = 0, sticky = "W", pady = (10,0), columnspan = 2)
-        self.listbox_upcoming.grid(row = 3, column = 0, columnspan = 2)
+
         self.listbox.focus_set()
 
         self.populateMenuButton()
@@ -47,11 +51,14 @@ class StartPage(ttk.Frame):
         self.menu_button.menu = tk.Menu(self.menu_button, tearoff = False)
         self.menu_button["menu"] = self.menu_button.menu
 
-        self.menu_button.menu.add_command(command = self.openEditPage, label = "Edit series")
+        self.menu_button.menu.add_command(command = self.openEditPage,
+                                          label = "Edit series")
         self.menu_button.menu.add_separator()
-        self.menu_button.menu.add_command(command = self.openAbout, label = "About")
+        self.menu_button.menu.add_command(command = self.openAbout,
+                                          label = "About")
         self.menu_button.menu.add_separator()
-        self.menu_button.menu.add_command(command = self.closeApp, label = "Exit")
+        self.menu_button.menu.add_command(command = self.closeApp,
+                                          label = "Exit")
 
     def openEditPage(self):
         """Opens the edit Page

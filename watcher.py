@@ -19,6 +19,7 @@ from AboutPage import AboutPage
 class Watcher(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+
         self.fetcher = SeriesInfo.SeriesInfo()
         self.xml = XMLParser.XMLParser()
         self.db = Database.Database()

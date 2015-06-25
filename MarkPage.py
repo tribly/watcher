@@ -8,9 +8,6 @@ from StartPage import StartPage
 class MarkPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        self.scrollbar = tk.Scrollbar(self)
-        self.textbox = tk.Text(self, yscrollcommand = self.scrollbar.set)
-
         # TODO move to Watcher
         self.controller = controller
 
@@ -18,23 +15,23 @@ class MarkPage(tk.Frame):
         self.mark_season = []
         self.cb_ep_list = []
 
-        self.label = ttk.Label(self, takefocus=False)
-        self.button = ttk.Button(self, takefocus=False, command = self.testfun)
-
+        self.scrollbar = tk.Scrollbar(self)
+        self.scrollbar.grid(row = 1, column = 2, sticky = "NS")
         self.scrollbar.config(command = self.textbox.yview)
 
-        ####
-        self.label.config(text = '')
-        self.button.config(text = 'Done')
-        ###
-
-        self.label.grid(pady = "10", padx = 10, row = 0, column = 0, sticky = "w")
-        self.button.grid(row = 0, column = 1, sticky = "w")
+        self.textbox = tk.Text(self, yscrollcommand = self.scrollbar.set)
         self.textbox.grid(row = 1, columnspan = 2, sticky="NS")
-        self.scrollbar.grid(row = 1, column = 2, sticky = "NS")
-
         self.textbox.config(width = 30, height = 10, bg = self["background"], bd = 0)
         self.textbox.config(state = tk.DISABLED)
+
+        self.label = ttk.Label(self, takefocus=False)
+        self.label.config(text = '')
+        self.label.grid(pady = "10", padx = 10, row = 0,
+                        column = 0, sticky = "w")
+
+        self.button = ttk.Button(self, takefocus=False, command = self.testfun)
+        self.button.config(text = 'Done')
+        self.button.grid(row = 0, column = 1, sticky = "w")
 
     def setName(self, name):
         self.label.config(text=name)
@@ -52,7 +49,7 @@ class MarkPage(tk.Frame):
         self.controller.db.writeBulkData(self.label["text"], data)
 
         self.controller.frames[StartPage].fillNextList()
-        self.controller.showFrame(StartPage)
+        self.controller.showFrame('StartPage')
 
     def clearBoxes(self):
         self.var_list = []

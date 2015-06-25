@@ -7,13 +7,13 @@ import tkinter.ttk as ttk
 class SearchPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        self.config(takefocus=False)
 
         self.listbox = tk.Listbox(self, takefocus=False, width = 30)
         self.listbox.bind('<Return>', controller.getSelectionSearch)
         self.listbox.bind('<Double-Button-1>', controller.getSelectionSearch)
-
         self.listbox.grid()
+
+        self.config(takefocus=False)
 
     def setTakeFocus(self):
         self.listbox.config(takefocus=True)
