@@ -16,13 +16,14 @@ class MarkPage(tk.Frame):
         self.cb_ep_list = []
 
         self.scrollbar = tk.Scrollbar(self)
-        self.scrollbar.grid(row = 1, column = 2, sticky = "NS")
-        self.scrollbar.config(command = self.textbox.yview)
 
         self.textbox = tk.Text(self, yscrollcommand = self.scrollbar.set)
         self.textbox.grid(row = 1, columnspan = 2, sticky="NS")
         self.textbox.config(width = 30, height = 10, bg = self["background"], bd = 0)
         self.textbox.config(state = tk.DISABLED)
+
+        self.scrollbar.grid(row = 1, column = 2, sticky = "NS")
+        self.scrollbar.config(command = self.textbox.yview)
 
         self.label = ttk.Label(self, takefocus=False)
         self.label.config(text = '')
