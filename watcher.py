@@ -14,6 +14,7 @@ from SearchPage import SearchPage
 from StartPage import StartPage
 from WatchPage import WatchPage
 from UpdateSeries import UpdateSeries
+from AboutPage import AboutPage
 
 class Watcher(tk.Tk):
     def __init__(self, *args, **kwargs):

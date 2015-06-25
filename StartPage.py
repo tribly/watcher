@@ -8,7 +8,7 @@ from PIL import Image
 
 class StartPage(ttk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        ttk.Frame.__init__(self, parent)
 
         self.menu_image = ImageTk.PhotoImage(Image.open('menu_button.png'))
 
@@ -48,9 +48,21 @@ class StartPage(ttk.Frame):
         self.menu_button["menu"] = self.menu_button.menu
 
         self.menu_button.menu.add_command(command = self.testfun, label = "Edit series")
+        self.menu_button.menu.add_command(command = self.openAbout, label = "About")
 
+    def openAbout(self):
+        """@todo: Docstring for openAbout
+        @return: @todo
+
+        """
+        # TODO: change
+        self.controller.showFrame('AboutPage')
+
+    #TODO proper function
     def testfun(self):
         print('la')
+
+    #TODO: create about page
 
     def fillUpcomingList(self):
         series_ids = self.controller.db.getUniqueIDs()
