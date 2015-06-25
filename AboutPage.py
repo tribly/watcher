@@ -11,6 +11,9 @@ class AboutPage(ttk.Frame):
 
     def __init__(self, parent, controller):
         ttk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        self.button = ttk.Button(self)
 
         self.link1 = 'http://www.flaticon.com/authors/freepik'
         self.link2 = 'http://www.flaticon.com/'
@@ -29,6 +32,7 @@ class AboutPage(ttk.Frame):
         self.label4.pack(anchor = "w", ipadx = '25', pady = '0 10')
         self.label5.pack(anchor = "w")
         self.label6.pack(anchor = "w", ipadx = '25', pady = '0 10')
+        self.button.pack(anchor = "w")
 
         self.font = font.Font(self.label2, self.label1.cget("font"))
         self.font.configure(underline = True)
@@ -39,6 +43,12 @@ class AboutPage(ttk.Frame):
         self.label2.bind('<Button-1>', self.openDev)
         self.label4.bind('<Button-1>', self.openDB)
         self.label6.bind('<Button-1>', self.openIcon)
+
+        self.button.config(text = 'back')
+        self.button.config(command = self.goBack)
+
+    def goBack(self):
+        self.controller.showFrame('StartPage')
 
     def openDev(self, event):
         webbrowser.open('https://tribly.de/')

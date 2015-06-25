@@ -47,22 +47,32 @@ class StartPage(ttk.Frame):
         self.menu_button.menu = tk.Menu(self.menu_button, tearoff = False)
         self.menu_button["menu"] = self.menu_button.menu
 
-        self.menu_button.menu.add_command(command = self.testfun, label = "Edit series")
+        self.menu_button.menu.add_command(command = self.openEditPage, label = "Edit series")
+        self.menu_button.menu.add_separator()
         self.menu_button.menu.add_command(command = self.openAbout, label = "About")
+        self.menu_button.menu.add_separator()
+        self.menu_button.menu.add_command(command = self.closeApp, label = "Exit")
+
+    def openEditPage(self):
+        """Opens the edit Page
+        @return: @todo
+
+        """
+        pass
+
+    def closeApp(self):
+        """Closes the app
+
+        """
+        dummy_event = 0
+        self.controller.closeApp(dummy_event)
 
     def openAbout(self):
         """@todo: Docstring for openAbout
         @return: @todo
 
         """
-        # TODO: change
         self.controller.showFrame('AboutPage')
-
-    #TODO proper function
-    def testfun(self):
-        print('la')
-
-    #TODO: create about page
 
     def fillUpcomingList(self):
         series_ids = self.controller.db.getUniqueIDs()
