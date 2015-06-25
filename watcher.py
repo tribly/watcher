@@ -38,15 +38,14 @@ class Watcher(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage,
-                  SearchPage,
-                  WatchPage,
-                  MarkPage):
+        for F in (StartPage, SearchPage,
+                  WatchPage, MarkPage,
+                  AboutPage):
             frame = F(self.container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.showFrame(StartPage)
+        self.showFrame('StartPage')
         self.fetchUpdates()
 
     def fetchUpdates(self):
@@ -72,7 +71,7 @@ class Watcher(tk.Tk):
 
     def fillSearchList(self, array):
         self.frames[SearchPage].fillListbox(array)
-        self.showFrame(SearchPage)
+        self.showFrame('SearchPage')
 
     def getSelectionSearch(self, event):
         entry = self.frames[SearchPage].listbox.curselection()
@@ -80,7 +79,7 @@ class Watcher(tk.Tk):
 
         self.frames[StartPage].addSeries2(selection)
 
-        self.showFrame(StartPage)
+        self.showFrame('StartPage')
 
     def getSelectionWatch(self, event):
         entry = self.frames[WatchPage].listbox.curselection()
@@ -91,18 +90,18 @@ class Watcher(tk.Tk):
             #self.setWatched(self.start_page_selection)
             self.frames[StartPage].fillNextList()
 
-            self.showFrame(StartPage)
+            self.showFrame('StartPage')
         elif selection == 'watchseries':
             self.setWatched(self.start_page_selection)
             self.frames[StartPage].fillNextList()
 
-            self.showFrame(StartPage)
+            self.showFrame('StartPage')
             self.prepareWSLink(self.start_page_selection)
         elif selection == 'set watched':
             self.setWatched(self.start_page_selection)
             self.frames[StartPage].fillNextList()
 
-            self.showFrame(StartPage)
+            self.showFrame('StartPage')
             # TODO: placeholder
             pass
         elif selection == 'mark list':
@@ -110,7 +109,7 @@ class Watcher(tk.Tk):
             name = self.start_page_selection[:pos - 1]
             self.frames[MarkPage].setName(name)
             self.frames[MarkPage].startSelection()
-            self.showFrame(MarkPage)
+            self.showFrame('MarkPage')
 
 
     def setWatched(self, name):
@@ -153,10 +152,16 @@ class Watcher(tk.Tk):
         self.start_page_selection = selection
 
         self.frames[WatchPage].setLabel(self.start_page_selection)
-        self.showFrame(WatchPage)
+        self.showFrame('WatchPage')
 
     def showFrame(self, to_show):
-        frame = self.frames[to_show]
+        frames = {'StartPage' : StartPage,
+                  'SearchPage' : SearchPage,
+                  'WatchPage' : WatchPage,
+                  'MarkPage' : MarkPage,
+                  'AboutPage' : AboutPage}
+
+        frame = self.frames[frames[to_show]]
         frame.tkraise()
         frame.setTakeFocus()
 
