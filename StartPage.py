@@ -20,7 +20,7 @@ class StartPage(ttk.Frame):
         self.listbox.config(height = 10, width = 30)
         self.listbox.bind('<Return>', self.controller.getSelectionStart)
         self.listbox.bind('<Double-Button-1>', self.controller.getSelectionStart)
-        self.listbox.grid(row = 1, column = 0, columnspan = 2)
+        self.listbox.grid(row = 1, column = 0, columnspan = 2, sticky = "ns")
 
         self.menu_button = tk.Menubutton(self)
         self.menu_button.config(image = self.menu_image)
