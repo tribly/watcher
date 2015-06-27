@@ -111,8 +111,10 @@ class MarkPage(tk.Frame):
 
         for season in self.var_list:
             self.mark_season.append(tk.IntVar())
-            cb = ttk.Checkbutton(self, variable = self.mark_season[season_count - 1],
+            cb = tk.Checkbutton(self, variable = self.mark_season[season_count - 1],
                                  text = "Season " + str(season_count),
+                                 activebackground = self.bg_color,
+                                 cursor = 'hand2',
                                  command = self.markSeason)
 
             self.textbox.window_create(tk.END, window = cb)
@@ -122,11 +124,13 @@ class MarkPage(tk.Frame):
                 cb.config(state = tk.ACTIVE)
 
             for episode in season:
-                cb = ttk.Checkbutton(self, variable = episode,
-                                     text = "Episode " + str(episode_count))
+                cb = tk.Checkbutton(self, variable = episode,
+                                    activebackground = self.bg_color,
+                                    cursor = 'hand2',
+                                    text = "Episode " + str(episode_count))
                 cb_season.append(cb)
                 if episode == 1:
-                    cb.config(state = tk.ACTIVE)
+                    cb.config(state = tk.ACTIVE, )
                 self.textbox.insert(tk.END, "\n  ")
                 self.textbox.window_create(tk.END, window = cb)
                 episode_count += 1
