@@ -180,7 +180,18 @@ class Watcher(tk.Tk):
         next_list = []
 
         for series in data:
-            air_date = datetime.datetime.strptime(series[4], "%Y-%m-%d")
+            date = series[4]
+            print(type(date), date)
+
+            #TODO: implement updates for single episodes
+            # this is just a temporary fix
+            if date == 'None':
+                print('la')
+                date = '2015-08-08'
+            ###
+
+            print(date)
+            air_date = datetime.datetime.strptime(date, "%Y-%m-%d")
             air_date = air_date.date()
 
             american_today = self.today - datetime.timedelta(1)
@@ -194,7 +205,16 @@ class Watcher(tk.Tk):
         upcoming_list = []
 
         for series in data:
-            air_date = datetime.datetime.strptime(series[4], "%Y-%m-%d")
+            date = series[4]
+
+            #TODO: implement updates for single episodes
+            # this is just a temporary fix
+            if date == 'None':
+                print('la')
+                date = '2015-08-08'
+            ###
+
+            air_date = datetime.datetime.strptime(date, "%Y-%m-%d")
             air_date = air_date.date()
 
             american_today = self.today - datetime.timedelta(1)
