@@ -181,16 +181,13 @@ class Watcher(tk.Tk):
 
         for series in data:
             date = series[4]
-            print(type(date), date)
 
             #TODO: implement updates for single episodes
             # this is just a temporary fix
             if date == 'None':
-                print('la')
                 date = '2015-08-08'
             ###
 
-            print(date)
             air_date = datetime.datetime.strptime(date, "%Y-%m-%d")
             air_date = air_date.date()
 
@@ -210,7 +207,6 @@ class Watcher(tk.Tk):
             #TODO: implement updates for single episodes
             # this is just a temporary fix
             if date == 'None':
-                print('la')
                 date = '2015-08-08'
             ###
 
