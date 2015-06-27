@@ -10,6 +10,9 @@ class StartPage(ttk.Frame):
     def __init__(self, parent, controller):
         ttk.Frame.__init__(self, parent)
 
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(1, weight=1)
+
         self.controller = controller
         self.menu_image = ImageTk.PhotoImage(Image.open('assets/menu_button.png'))
 

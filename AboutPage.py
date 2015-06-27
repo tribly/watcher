@@ -13,6 +13,9 @@ class AboutPage(ttk.Frame):
         ttk.Frame.__init__(self, parent)
         self.controller = controller
 
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(6, weight=1)
+
         self.button = ttk.Button(self)
 
         self.link1 = 'http://www.flaticon.com/authors/freepik'
@@ -26,13 +29,13 @@ class AboutPage(ttk.Frame):
         self.label5 = tk.Label(self, text = 'Menu icon by:')
         self.label6 = tk.Label(self, text = 'Freepik', fg = "#0000FF", cursor = 'hand2')
 
-        self.label1.pack(anchor = "w")
-        self.label2.pack(anchor = "w", ipadx = '25', pady = '0 10')
-        self.label3.pack(anchor = "w")
-        self.label4.pack(anchor = "w", ipadx = '25', pady = '0 10')
-        self.label5.pack(anchor = "w")
-        self.label6.pack(anchor = "w", ipadx = '25', pady = '0 10')
-        self.button.pack(anchor = "w")
+        self.label1.grid()
+        self.label2.grid(padx = '25', pady = '0 10')
+        self.label3.grid()
+        self.label4.grid(padx = '25', pady = '0 10')
+        self.label5.grid()
+        self.label6.grid(padx = '25', pady = '0 10')
+        self.button.grid(sticky = "ws")
 
         self.font = font.Font(self.label2, self.label1.cget("font"))
         self.font.configure(underline = True)

@@ -8,10 +8,17 @@ class SearchPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(1, weight=1)
+
+        self.label = tk.Label(self)
+        self.label.config(text = "Search")
+        self.label.grid(row = 0, column = 0, pady = 10, sticky = "n")
+
         self.listbox = tk.Listbox(self, takefocus=False, width = 30)
         self.listbox.bind('<Return>', controller.getSelectionSearch)
         self.listbox.bind('<Double-Button-1>', controller.getSelectionSearch)
-        self.listbox.grid()
+        self.listbox.grid(row = 1, column = 0, sticky = "news")
 
         self.config(takefocus=False)
 

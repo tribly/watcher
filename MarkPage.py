@@ -11,6 +11,9 @@ class MarkPage(tk.Frame):
         # TODO move to Watcher
         self.controller = controller
 
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(1, weight=1)
+
         self.var_list = []
         self.mark_season = []
         self.cb_ep_list = []
