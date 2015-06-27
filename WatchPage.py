@@ -8,6 +8,8 @@ class WatchPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
+        self.bg_color = controller['bg']
+
         self.columnconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
@@ -15,6 +17,7 @@ class WatchPage(tk.Frame):
         self.label.grid(row = 0, column = 0, pady = "10")
 
         self.listbox = tk.Listbox(self, takefocus=False)
+        self.listbox.config(highlightcolor = self.bg_color)
         self.listbox.insert(tk.END, 'kat')
         self.listbox.insert(tk.END, 'watchseries')
         self.listbox.insert(tk.END, 'set watched')

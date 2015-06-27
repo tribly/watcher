@@ -8,10 +8,12 @@ class SearchPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
+        self.bg_color = controller['bg']
+
         self.columnconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
-        self.label = tk.Label(self)
+        self.label = tk.Label(self, highlightcolor = self.bg_color)
         self.label.config(text = "Search")
         self.label.grid(row = 0, column = 0, pady = 10, sticky = "n")
 

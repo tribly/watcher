@@ -10,13 +10,16 @@ class StartPage(ttk.Frame):
     def __init__(self, parent, controller):
         ttk.Frame.__init__(self, parent)
 
+
         self.columnconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
         self.controller = controller
         self.menu_image = ImageTk.PhotoImage(Image.open('assets/menu_button.png'))
 
-        self.listbox = tk.Listbox(self)
+        self.bg_color = controller['bg']
+
+        self.listbox = tk.Listbox(self, highlightcolor = self.bg_color)
         self.listbox.config(height = 10, width = 30)
         self.listbox.bind('<Return>', self.controller.getSelectionStart)
         self.listbox.bind('<Double-Button-1>', self.controller.getSelectionStart)
@@ -27,7 +30,7 @@ class StartPage(ttk.Frame):
         self.menu_button.config(relief = "raised")
         self.menu_button.grid(row = 0, column = 1, sticky = "E", pady = "5")
 
-        self.listbox_upcoming = tk.Listbox(self)
+        self.listbox_upcoming = tk.Listbox(self, highlightcolor = self.bg_color)
         self.listbox_upcoming.config(height = 10, width = 30)
         self.listbox_upcoming.bind('<Return>')
         self.listbox_upcoming.bind('<Double-Button-1>')
