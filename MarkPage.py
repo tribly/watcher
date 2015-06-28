@@ -24,7 +24,7 @@ class MarkPage(tk.Frame):
 
         self.textbox = tk.Text(self, yscrollcommand = self.scrollbar.set)
         self.textbox.config(highlightcolor = self.bg_color)
-        self.textbox.grid(row = 1, columnspan = 2, sticky="NS")
+        self.textbox.grid(row = 1, columnspan = 2, sticky="news")
         self.textbox.config(width = 30, height = 10, bg = self["background"], bd = 0)
         self.textbox.config(state = tk.DISABLED)
 
