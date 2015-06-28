@@ -2,7 +2,7 @@
 
 A simple program to help you keep track of series you're watching
 
-<a href="https://flattr.com/submit/auto?user_id=tribly&url=http%3A%2F%2Fgithub.com" target="_blank"><img src="//button.flattr.com/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0"></a>
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=tribly&url=https://github.com/tribly/watcher&title=watcher&language=&tags=github&category=software)
 
 ## Features
 
