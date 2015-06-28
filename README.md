@@ -10,7 +10,17 @@ A simple program to help you keep track of the series you're watching
 * Bulk marking seasons
 * Fetching info from http://thetvdb.com
 
-### TODO
+## Dependencies
+
+* Python 3
+* tkinter
+* Python PIL
+
+## HowTo
+
+Just clone the repo and start watcher.py
+
+## TODO
 
 * Edit series after they have been watched completely
 * Delete series
