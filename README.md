@@ -1,6 +1,8 @@
 # watcher
 
-A simple program to help you keep track of the series you're watching
+A simple program to help you keep track of series you're watching
+
+<a href="https://flattr.com/submit/auto?user_id=tribly&url=http%3A%2F%2Fgithub.com" target="_blank"><img src="//button.flattr.com/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0"></a>
 
 ## Features
 
