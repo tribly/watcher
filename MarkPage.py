@@ -67,6 +67,7 @@ class MarkPage(tk.Frame):
     def clearVars(self):
         self.var_list = []
         self.mark_season = []
+        self.cb_ep_list = []
 
     def startSelection(self):
         self.clearBoxes()
