@@ -2,7 +2,7 @@
 
 A simple program to help you keep track of the series you're watching
 
-## Features:
+## Features
 
 * Super Minimalistic
 * Only show season and episode (s01e01) with the series name
@@ -10,7 +10,7 @@ A simple program to help you keep track of the series you're watching
 * Bulk marking seasons
 * Fetching info from http://thetvdb.com
 
-### TODO:
+### TODO
 
 * Edit series after they have been watched completely
 * Delete series
