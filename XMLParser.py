@@ -26,12 +26,25 @@ class XMLParser():
 
             info = [season]
 
+            info.append(parent.find('id').text)
             info.append(parent.find('EpisodeNumber').text)
             info.append(parent.find('FirstAired').text)
 
             series_info.append(info)
 
         return series_info
+
+    def getEpisodeInfo(self, episode_id):
+        root = ET.fromstring(data)
+
+        episodes = root.findall('Episode')
+
+        info = []
+
+        info.append(parent.find('id').text)
+        info.append(parent.find('FirstAired').text)
+
+        return info
 
     def separateSeriesEpisodes(self, data):
         root = ET.fromstring(data)

@@ -55,6 +55,9 @@ class UpdateSeries(threading.Thread):
         local_series_tmp = self.db_handler.getUniqueIDs()
         local_series = []
 
+        local_episodes_tmp = self.db_handler.getEpisodeIDs()
+        local_episodes = []
+
         # extract the values from the tuples
         for series_id in local_series_tmp:
             local_series.append(series_id[0])
@@ -67,9 +70,24 @@ class UpdateSeries(threading.Thread):
             if series_id in local_series:
                 self.updateInfo(series_id)
 
-            break
+        for episode_id in local_episodes_tmp:
+            local_episodes.append(episode_id[0])
+
+        for episode in update_list[1]:
+            episode_id = int(episode)
+
+            if episode_id in local_episodes:
+                self.updateEpisode(episode_id)
 
         self.writeLastUpdateTime()
+
+    def updateEpisode(self, episode_id):
+        """Update the episode with the proper id
+        """
+        whole_data = self.html_handler.getSeriesInfo(episode_id)
+        episode_data = self.xml_handler.getSeriesInfo(whole_data)
+
+        self.db_handler.updateEpisodeDate(episode_id, episode_data[1])
 
     def filterSeasons(self, data):
         """Filter out the seasons, so we only have the seasons in the list
