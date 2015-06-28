@@ -23,8 +23,9 @@ class UpdateSeries(threading.Thread):
         self.controller.updateStatus('done updating series')
 
     def getServerTime(self):
-        """@todo: Docstring for getServerTime
-        @return: @todo
+        """Get the current time from the server
+
+        @return: int - time in seconds
 
         """
         time_xml = self.html_handler.getServerTime()
@@ -34,15 +35,13 @@ class UpdateSeries(threading.Thread):
 
     def writeLastUpdateTime(self):
         """Write the current time to the db
-        @return: @todo
 
         """
         time = self.getServerTime()
         self.db_handler.writeTime(time)
 
     def getSeriesUpdates(self):
-        """@todo: Docstring for getSeriesUpdates
-        @return: @todo
+        """Fetch the new updates
 
         """
         last_update = self.db_handler.getLastUpdate()
@@ -63,6 +62,8 @@ class UpdateSeries(threading.Thread):
             local_series.append(series_id[0])
 
         # Only iterate over series, because we don't need episodes right now
+        # update_list[0] contains series
+        # update_list[1] contains episodes
         for series in update_list[0]:
             series_id = int(series)
 
@@ -83,6 +84,7 @@ class UpdateSeries(threading.Thread):
 
     def updateEpisode(self, episode_id):
         """Update the episode with the proper id
+
         """
         whole_data = self.html_handler.getSeriesInfo(episode_id)
         episode_data = self.xml_handler.getSeriesInfo(whole_data)
@@ -92,8 +94,8 @@ class UpdateSeries(threading.Thread):
     def filterSeasons(self, data):
         """Filter out the seasons, so we only have the seasons in the list
 
-        @param data @todo
-        @return: @todo
+        @param data - list : list full of info
+        @return: seasons - list : list of distinct seasons
 
         """
         seasons = []
@@ -108,17 +110,17 @@ class UpdateSeries(threading.Thread):
 
         return seasons
 
-    def updateInfo(self, id):
+    def updateInfo(self, series_id):
         """Update the info of the local series
 
-        @param series_id @todo
-        @return: @todo
+        @param series_id - int : id of series
+        @return: nothing
 
         """
-        whole_data = self.html_handler.getSeriesInfo(id)
+        whole_data = self.html_handler.getSeriesInfo(series_id)
         series_data = self.xml_handler.getSeriesInfo(whole_data)
 
-        local_seasons = self.getLocalSeasons(id)
+        local_seasons = self.getLocalSeasons(series_id)
         remote_seasons = self.extractSeasons(series_data)
 
         new_seasons = self.compareLocalRemote(local_seasons, remote_seasons)
@@ -127,17 +129,16 @@ class UpdateSeries(threading.Thread):
         if not new_seasons:
             return
 
-        name = self.db_handler.getNameFromID(id)
-
-        proper_data = self.prepareForDB(name, id, new_seasons, series_data)
+        name = self.db_handler.getNameFromID(series_id)
+        proper_data = self.prepareForDB(name, series_id, new_seasons, series_data)
 
         self.db_handler.writeData(proper_data)
 
     def prepareForDB(self, name, series_id, new_seasons, remote_data):
         """Prepare the data to be handled properly by the db
 
-        @param name @todo
-        @param new_seasons @todo
+        @param name - string : Name of the series
+        @param new_seasons - list : List of seasons to add
         @return: Final list, which the db can process
 
         """
@@ -155,8 +156,8 @@ class UpdateSeries(threading.Thread):
     def extractSeasons(self, data):
         """Extract only the season information
 
-        @param data @todo
-        @return: @todo
+        @param data - list : list of info
+        @return: seasons - list :
 
         """
         seasons = []
