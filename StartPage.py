@@ -93,8 +93,8 @@ class StartPage(ttk.Frame):
 
         series_upcoming = []
 
-        for id in series_ids:
-            series = self.controller.db.getNext(id[0])
+        for series_id in series_ids:
+            series = self.controller.db.getNext(series_id)
 
             if series == None:
                 continue
@@ -114,8 +114,8 @@ class StartPage(ttk.Frame):
 
         series_next = []
 
-        for id in series_ids:
-            series = self.controller.db.getNext(id[0])
+        for series_id in series_ids:
+            series = self.controller.db.getNext(series_id)
 
             if series == None:
                 continue

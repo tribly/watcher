@@ -24,7 +24,6 @@ class Database():
         """Write the last update time to db
 
         @param time - int - in sec
-        @return: @todo
 
         """
         cursor = self.connection.cursor()
@@ -35,6 +34,19 @@ class Database():
 
         self.connection.commit()
         cursor.close()
+
+    def extractValues(self, data):
+        """Extract the values from the tuples inside a string
+
+        @param data @todo
+        @return: @todo
+
+        """
+        out = []
+        for i in data:
+            out.append(i[0])
+
+        return out
 
     def getNext(self, id):
         cursor = self.connection.cursor()
@@ -47,6 +59,7 @@ class Database():
                         ORDER BY date asc, episode asc''', id)
 
         data = cursor.fetchone()
+
         cursor.close()
         return data
 
@@ -60,6 +73,7 @@ class Database():
                         ORDER BY date asc, episode asc''', id)
 
         data = cursor.fetchone()
+
         cursor.close()
         return data
 
@@ -73,6 +87,8 @@ class Database():
         cursor.execute('SELECT episode_id FROM info')
 
         data = cursor.fetchall()
+        data = self.extractValues(data)
+
         cursor.close()
         return data
 
@@ -82,6 +98,8 @@ class Database():
         cursor.execute('SELECT DISTINCT series_ID FROM info')
 
         data = cursor.fetchall()
+        data = self.extractValues(data)
+
         cursor.close()
         return data
 
@@ -149,7 +167,8 @@ class Database():
                           WHERE series_id = ?''', series_id)
 
 
-        data = cursor.fetchone()[0]
+        data = cursor.fetchone()
+
         cursor.close()
         return data
 
@@ -217,6 +236,7 @@ class Database():
                           WHERE name = ?''', name)
 
         series_id = cursor.fetchone()
+
         cursor.close()
         return series_id
 
@@ -270,7 +290,8 @@ class Database():
                           FROM conf
                        ''')
 
-        data = cursor.fetchone()[0]
+        data = cursor.fetchone()
+
         cursor.close()
         return data
 

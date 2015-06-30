@@ -51,16 +51,10 @@ class UpdateSeries(threading.Thread):
         # List containing series and episode updates
         update_list = self.xml_handler.separateSeriesEpisodes(updates)
 
-        # tmp, 'cause where getting a list full of tuples
-        local_series_tmp = self.db_handler.getUniqueIDs()
-        local_series = []
-
-        local_episodes_tmp = self.db_handler.getEpisodeIDs()
-        local_episodes = []
-
-        # extract the values from the tuples
-        for series_id in local_series_tmp:
-            local_series.append(series_id[0])
+        # series ids we have locally in our db
+        local_series = self.db_handler.getUniqueIDs()
+        # episode ids we have locally in our db
+        local_episodes = self.db_handler.getEpisodeIDs()
 
         # Only iterate over series, because we don't need episodes right now
         for series in update_list[0]:
@@ -69,9 +63,6 @@ class UpdateSeries(threading.Thread):
             # update the info, if a remote series was updated, and found locally
             if series_id in local_series:
                 self.updateInfo(series_id)
-
-        for episode_id in local_episodes_tmp:
-            local_episodes.append(episode_id[0])
 
         for episode in update_list[1]:
             episode_id = int(episode)
