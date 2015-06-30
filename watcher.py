@@ -85,6 +85,7 @@ class Watcher(tk.Tk):
         """
         entry = self.frames[EditPage].listbox.curselection()
         selection = self.frames[EditPage].listbox.get(entry)
+        self.series_selection = selection
 
         self.frames[WatchPage].setLabel(selection)
         self.showFrame('WatchPage')
@@ -136,12 +137,19 @@ class Watcher(tk.Tk):
             self.showFrame('MarkPage')
 
         elif selection == 'Delete series':
+            # TODO: make that prettier
             pos = self.series_selection.find('-')
-            name = self.series_selection[:pos - 1]
+
+            if pos == -1:
+                name = self.series_selection
+            else:
+                name = self.series_selection[:pos - 1]
+
             series_id = self.db.getIdFromName(name)
             self.db.deleteSeries(series_id)
             self.updateStatus('Deleted ' + name)
             self.frames[StartPage].fillNextList()
+            self.frames[EditPage].refreshListbox()
             self.showFrame('StartPage')
 
 

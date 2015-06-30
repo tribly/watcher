@@ -38,6 +38,13 @@ class EditPage(tk.Frame):
         for name in names:
             self.listbox.insert(tk.END, name)
 
+    def refreshListbox(self):
+        """Refresh the menu after perfoming some task
+
+        """
+        self.listbox.delete(0, tk.END)
+        self.populateListbox()
+
     def setTakeFocus(self):
         """Let the Listox-widget get the focus by tabbing
 
