@@ -24,5 +24,10 @@ Just clone the repo and start watcher.py
 
 ## TODO
 
-* Edit series after they have been watched completely
-* Delete series
+#### important
+
+* nothing yet
+
+#### maybe
+
+* Add online-backup
