@@ -58,8 +58,8 @@ class StartPage(ttk.Frame):
         self.menu_button["menu"] = self.menu_button.menu
 
         #TODO: implement
-        #self.menu_button.menu.add_command(command = self.openEditPage,
-                                          #label = "Edit series")
+        self.menu_button.menu.add_command(command = self.openEditPage,
+                                          label = "Edit series")
         self.menu_button.menu.add_separator()
         self.menu_button.menu.add_command(command = self.openAbout,
                                           label = "About")
@@ -72,7 +72,7 @@ class StartPage(ttk.Frame):
         @return: @todo
 
         """
-        pass
+        self.controller.showFrame('EditPage')
 
     def closeApp(self):
         """Closes the app

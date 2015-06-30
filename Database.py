@@ -63,6 +63,22 @@ class Database():
         cursor.close()
         return data
 
+    def getDistinctNames(self):
+        """Get the distinct series names from all series
+        @return: list - All distinct series names
+
+        """
+        cursor = self.connection.cursor()
+
+        cursor.execute('''SELECT DISTINCT name
+                          FROM info''')
+
+        data = cursor.fetchall()
+        data = self.extractValues(data)
+
+        cursor.close()
+        return data
+
     def getNextID(self, id):
         cursor = self.connection.cursor()
 
