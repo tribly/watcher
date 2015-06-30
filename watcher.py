@@ -27,7 +27,7 @@ class Watcher(tk.Tk):
         self.updater = UpdateSeries(self)
         self.today = datetime.date.today()
 
-        self.start_page_selection = ""
+        self.series_selection = ""
 
         self.container = ttk.Frame(self, padding = "5 5 5 5")
         self.container.pack(side = "top", fill="both", expand=True)
@@ -98,34 +98,51 @@ class Watcher(tk.Tk):
         self.showFrame('StartPage')
 
     def getSelectionWatch(self, event):
-        entry = self.frames[WatchPage].listbox.curselection()
-        selection = self.frames[WatchPage].listbox.get(entry)
+        try:
+            entry = self.frames[WatchPage].listbox.curselection()
+            selection = self.frames[WatchPage].listbox.get(entry)
+        except tk.TclError as e:
+            pass
+        try:
+            entry = self.frames[WatchPage].listbox_options.curselection()
+            selection = self.frames[WatchPage].listbox_options.get(entry)
+        except tk.TclError as e:
+            pass
 
         if selection == 'kat':
-            self.prepareKATLink(self.start_page_selection)
-            #self.setWatched(self.start_page_selection)
+            self.prepareKATLink(self.series_selection)
+            #self.setWatched(self.series_selection)
             self.frames[StartPage].fillNextList()
 
             self.showFrame('StartPage')
         elif selection == 'watchseries':
-            self.setWatched(self.start_page_selection)
+            self.setWatched(self.series_selection)
             self.frames[StartPage].fillNextList()
 
             self.showFrame('StartPage')
-            self.prepareWSLink(self.start_page_selection)
-        elif selection == 'set watched':
-            self.setWatched(self.start_page_selection)
+            self.prepareWSLink(self.series_selection)
+        elif selection == 'Set watched':
+            self.setWatched(self.series_selection)
             self.frames[StartPage].fillNextList()
 
             self.showFrame('StartPage')
             # TODO: placeholder
             pass
-        elif selection == 'mark list':
-            pos = self.start_page_selection.find('-')
-            name = self.start_page_selection[:pos - 1]
+        elif selection == 'Mark seasons':
+            pos = self.series_selection.find('-')
+            name = self.series_selection[:pos - 1]
             self.frames[MarkPage].setName(name)
             self.frames[MarkPage].startSelection()
             self.showFrame('MarkPage')
+
+        elif selection == 'Delete series':
+            pos = self.series_selection.find('-')
+            name = self.series_selection[:pos - 1]
+            series_id = self.db.getIdFromName(name)
+            self.db.deleteSeries(series_id)
+            self.updateStatus('Deleted ' + name)
+            self.frames[StartPage].fillNextList()
+            self.showFrame('StartPage')
 
 
     def setWatched(self, name):
@@ -165,9 +182,9 @@ class Watcher(tk.Tk):
         entry = self.frames[StartPage].listbox.curselection()
         selection = self.frames[StartPage].listbox.get(entry)
 
-        self.start_page_selection = selection
+        self.series_selection = selection
 
-        self.frames[WatchPage].setLabel(self.start_page_selection)
+        self.frames[WatchPage].setLabel(self.series_selection)
         self.showFrame('WatchPage')
 
     def getSeriesNames(self):
