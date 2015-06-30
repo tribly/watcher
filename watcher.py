@@ -15,6 +15,7 @@ from StartPage import StartPage
 from WatchPage import WatchPage
 from UpdateSeries import UpdateSeries
 from AboutPage import AboutPage
+from EditPage import EditPage
 
 class Watcher(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -42,7 +43,7 @@ class Watcher(tk.Tk):
 
         for F in (StartPage, SearchPage,
                   WatchPage, MarkPage,
-                  AboutPage):
+                  AboutPage, EditPage):
             frame = F(self.container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -74,6 +75,19 @@ class Watcher(tk.Tk):
     def fillSearchList(self, array):
         self.frames[SearchPage].fillListbox(array)
         self.showFrame('SearchPage')
+
+    def getSelectionEdit(self, event):
+        """Get the selected item from the widget
+
+        @param event @todo
+        @return: @todo
+
+        """
+        entry = self.frames[EditPage].listbox.curselection()
+        selection = self.frames[EditPage].listbox.get(entry)
+
+        self.frames[WatchPage].setLabel(selection)
+        self.showFrame('WatchPage')
 
     def getSelectionSearch(self, event):
         entry = self.frames[SearchPage].listbox.curselection()
@@ -156,12 +170,22 @@ class Watcher(tk.Tk):
         self.frames[WatchPage].setLabel(self.start_page_selection)
         self.showFrame('WatchPage')
 
+    def getSeriesNames(self):
+        """Get all the unique series names
+        @return: list - All distinct series names
+
+        """
+        names = self.db.getDistinctNames()
+
+        return names
+
     def showFrame(self, to_show):
         frames = {'StartPage' : StartPage,
                   'SearchPage' : SearchPage,
                   'WatchPage' : WatchPage,
                   'MarkPage' : MarkPage,
-                  'AboutPage' : AboutPage}
+                  'AboutPage' : AboutPage,
+                  'EditPage' : EditPage}
 
         frame = self.frames[frames[to_show]]
         frame.tkraise()
