@@ -20,8 +20,9 @@ A simple program to help you keep track of series you're watching
 
 ## HowTo
 
-Just clone the repo and start watcher
-Just tested under Arch, so no guarantee it works with your distro.
+Just clone the repo and start watcher.
+
+Just tested under Arch, so no guarantee that it works with your distro.
 
 ## TODO
 
