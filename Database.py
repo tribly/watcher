@@ -65,6 +65,7 @@ class Database():
 
     def getNextID(self, id):
         cursor = self.connection.cursor()
+        id = (id,)
 
         cursor.execute('''SELECT id
                         FROM info
@@ -167,7 +168,7 @@ class Database():
                           WHERE series_id = ?''', series_id)
 
 
-        data = cursor.fetchone()
+        data = cursor.fetchone()[0]
 
         cursor.close()
         return data
@@ -184,7 +185,6 @@ class Database():
         # data = [[],[],...]
         cursor = self.connection.cursor()
         id = self.getIdFromName(name)
-        id = id[0]
         season = 1
         episode = 1
 
@@ -236,9 +236,12 @@ class Database():
                           WHERE name = ?''', name)
 
         series_id = cursor.fetchone()
-
         cursor.close()
-        return series_id
+
+        if series_id == None:
+            return None
+        else:
+            return series_id[0]
 
     def setWatched(self, name):
         cursor = self.connection.cursor()
@@ -257,6 +260,7 @@ class Database():
         cursor = self.connection.cursor()
         name = self.extractName(name)
         id = self.getIdFromName(name)
+        id = (id,)
 
         cursor.execute('''SELECT season
                           FROM info
@@ -282,6 +286,21 @@ class Database():
 
         cursor.close()
         return data
+
+    def deleteSeries(self, series_id):
+        """Delete the entire series info from the db
+
+        @param series_id - int : id of the series to delete
+
+        """
+        cursor = self.connection.cursor()
+        series_id = (series_id,)
+
+        cursor.execute('''DELETE FROM info
+                          WHERE series_id = ?''', series_id)
+
+        self.connection.commit()
+        cursor.close()
 
     def getLastUpdate(self):
         cursor = self.connection.cursor()
