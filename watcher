@@ -125,6 +125,7 @@ class Watcher(tk.Tk):
         elif selection == 'Set watched':
             self.setWatched(self.series_selection)
             self.frames[StartPage].fillNextList()
+            self.frames[StartPage].refreshUpcoming()
 
             self.showFrame('StartPage')
             # TODO: placeholder

@@ -88,6 +88,14 @@ class StartPage(ttk.Frame):
         """
         self.controller.showFrame('AboutPage')
 
+    def refreshUpcoming(self):
+        """Reload the list after updating it
+        :returns: @todo
+
+        """
+        self.listbox_upcoming.delete(0, tk.END)
+        self.fillUpcomingList()
+
     def fillUpcomingList(self):
         series_ids = self.controller.db.getUniqueIDs()
 
