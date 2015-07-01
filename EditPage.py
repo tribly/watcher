@@ -22,7 +22,7 @@ class EditPage(tk.Frame):
         self.label.grid(row = 0, column = 0, pady = "10")
 
         self.listbox = tk.Listbox(self, takefocus = False)
-        self.listbox.config(highlightcolor = self.bg_color)
+        self.listbox.config(highlightcolor = self.bg_color, activestyle = 'none')
         self.listbox.bind('<Double-Button-1>', controller.getSelectionEdit)
         self.listbox.bind('<Return>', controller.getSelectionEdit)
         self.listbox.grid(row = 1, column = 0, sticky = "news")

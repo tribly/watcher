@@ -18,6 +18,7 @@ class SearchPage(tk.Frame):
         self.label.grid(row = 0, column = 0, pady = 10, sticky = "n")
 
         self.listbox = tk.Listbox(self, takefocus=False, width = 30)
+        self.listbox.config(highlightcolor = self.bg_color, activestyle = 'none')
         self.listbox.bind('<Return>', controller.getSelectionSearch)
         self.listbox.bind('<Double-Button-1>', controller.getSelectionSearch)
         self.listbox.grid(row = 1, column = 0, sticky = "news")

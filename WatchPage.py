@@ -21,7 +21,7 @@ class WatchPage(tk.Frame):
         self.label_links.grid(row = 1, column = 0,  sticky = 'w')
 
         self.listbox = tk.Listbox(self, takefocus=False)
-        self.listbox.config(highlightcolor = self.bg_color)
+        self.listbox.config(highlightcolor = self.bg_color, activestyle = 'none')
         self.listbox.insert(tk.END, 'kat')
         self.listbox.insert(tk.END, 'watchseries')
         self.listbox.bind('<Return>', controller.getSelectionWatch)
@@ -33,7 +33,7 @@ class WatchPage(tk.Frame):
         self.label_options.grid(row = 3, column = 0, pady = '10 0', sticky = 'w')
 
         self.listbox_options = tk.Listbox(self, takefocus=False)
-        self.listbox_options.config(highlightcolor = self.bg_color)
+        self.listbox_options.config(highlightcolor = self.bg_color, activestyle = 'none')
         self.listbox_options.insert(tk.END, 'Set watched')
         self.listbox_options.insert(tk.END, 'Mark seasons')
         self.listbox_options.insert(tk.END, 'Delete series')

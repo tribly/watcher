@@ -20,7 +20,7 @@ class StartPage(ttk.Frame):
         self.bg_color = controller['bg']
 
         self.listbox = tk.Listbox(self, highlightcolor = self.bg_color)
-        self.listbox.config(height = 10, width = 30)
+        self.listbox.config(height = 10, width = 30, activestyle = 'none')
         self.listbox.bind('<Return>', self.controller.getSelectionStart)
         self.listbox.bind('<Double-Button-1>', self.controller.getSelectionStart)
         self.listbox.grid(row = 1, column = 0, columnspan = 2, sticky = "news")
@@ -31,7 +31,7 @@ class StartPage(ttk.Frame):
         self.menu_button.grid(row = 0, column = 1, sticky = "E", pady = "5")
 
         self.listbox_upcoming = tk.Listbox(self, highlightcolor = self.bg_color)
-        self.listbox_upcoming.config(height = 10, width = 30)
+        self.listbox_upcoming.config(height = 10, width = 30, activestyle = 'none')
         self.listbox_upcoming.bind('<Return>')
         self.listbox_upcoming.bind('<Double-Button-1>')
         self.listbox_upcoming.grid(row = 3, column = 0, columnspan = 2, sticky = "news")
