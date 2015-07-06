@@ -33,6 +33,8 @@ class SearchPage(tk.Frame):
         self.listbox.config(takefocus=False)
 
     def fillListbox(self, array):
+        self.listbox.delete(0, tk.END)
+
         for name in array:
             self.listbox.insert(tk.END, name)
 
