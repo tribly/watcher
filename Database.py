@@ -20,6 +20,24 @@ class Database():
     def closeDB(self):
         self.connection.close()
 
+    def getUpcoming(self):
+        """Get the next upcoming episodes in the next 7 days
+        @return: list of tuples - episode_id's
+
+        """
+        cursor = self.connection.cursor()
+
+        cursor.execute('''SELECT episode_id
+                          FROM info
+                          WHERE strftime('%Y-%m-%d', date)
+                            BETWEEN date('now') AND date('now', '+7 days')''')
+
+        data = cursor.fetchall()
+        data = self.extractValues(data)
+        cursor.close()
+
+        return data
+
     def writeTime(self, time):
         """Write the last update time to db
 
@@ -47,6 +65,25 @@ class Database():
             out.append(i[0])
 
         return out
+
+    def getNextInfo(self, episode_id):
+        """Get the relevant info for the episode_id
+
+        @param episode_id @todo
+        @return: @todo
+
+        """
+        cursor = self.connection.cursor()
+        episode_id = (episode_id,)
+
+        cursor.execute('''SELECT name, series_id, season, episode, date
+                        FROM info
+                        WHERE episode_id = ?''', episode_id)
+
+        data = cursor.fetchone()
+
+        cursor.close()
+        return data
 
     def getNext(self, id):
         cursor = self.connection.cursor()
@@ -145,7 +182,7 @@ class Database():
     def writeData(self, data):
         """Write the data to the db
 
-        @param data [name, id, season, episode, air_date]
+        @param data [name, id, season, episode_id, episode, air_date]
         @return: @todo
 
         """

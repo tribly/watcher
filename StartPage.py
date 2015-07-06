@@ -97,21 +97,20 @@ class StartPage(ttk.Frame):
         self.fillUpcomingList()
 
     def fillUpcomingList(self):
-        series_ids = self.controller.db.getUniqueIDs()
+        """Populate the list of upcoming episodes
+        @return: @todo
 
-        series_upcoming = []
+        """
+        episode_ids = self.controller.db.getUpcoming()
 
-        for series_id in series_ids:
-            series = self.controller.db.getNext(series_id)
+        upcoming = []
 
-            if series == None:
-                continue
-            else:
-                series_upcoming.append(series)
+        for episode_id in episode_ids:
+            series = self.controller.db.getNextInfo(episode_id)
+            upcoming.append(series)
 
-        series_upcoming = self.controller.checkUpcoming(series_upcoming)
-
-        pretty_info = self.compactInfo(series_upcoming, True)
+        upcoming = self.controller.checkUpcoming(upcoming)
+        pretty_info = self.compactInfo(upcoming, True)
 
         for series in pretty_info:
             self.listbox_upcoming.insert(tk.END, series)
